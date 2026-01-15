@@ -5,7 +5,6 @@ import psycopg2
 from functools import wraps
 from flask import session, redirect, url_for
 from flask import request, jsonify, make_response
-import pdfkit
 from datetime import datetime
 import qrcode
 import io
@@ -19,9 +18,8 @@ from weasyprint import HTML
 IS_PRODUCTION = os.getenv("ENV") == "production"
 
 
-config = pdfkit.configuration(
-    wkhtmltopdf=r"C:\archivos de programa\wkhtmltopdf\bin\wkhtmltopdf.exe"
-)
+
+
 
 app = Flask(__name__)
 

@@ -1793,3 +1793,19 @@ body {
     color: #FAFAFA;
     box-shadow: 0 10px 25px rgba(255, 255, 255, 0.4)
 }
+
+/* ===== PRINT ===== */
+.no-print {
+  margin-top: 30px;
+  text-align: center;
+}
+
+@media print {
+  .no-print {
+    display: none;
+  }
+
+  body {
+    margin: 20px;
+  }
+}

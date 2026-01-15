@@ -11,6 +11,11 @@ import qrcode
 import io
 import base64
 from werkzeug.utils import secure_filename
+import os
+
+
+
+IS_PRODUCTION = os.getenv("ENV") == "production"
 
 
 config = pdfkit.configuration(
@@ -529,7 +534,7 @@ def agregar_examen_db():
     return render_template("agregar_examen_db.html", mensaje=mensaje, examenes=examenes)
 
 
-# Este es para que se cree el presupuesto en html pero en pdf, use dependencias de pdfkit
+# Este es para que se cree el presupuesto en html pero en pdf, use dependencias de pdfkit@app.route("/presupuesto_pdf")
 @app.route("/presupuesto_pdf")
 def presupuesto_pdf():
     if "cliente_id" not in session:
@@ -540,9 +545,9 @@ def presupuesto_pdf():
     conexion = conectar()
     cursor = conexion.cursor(cursor_factory=DictCursor)
 
-    # Datos del cliente
     cursor.execute(
-        """SELECT nombre, cedula, telefono FROM clientes WHERE id = %s""", (cliente_id,)
+        "SELECT nombre, cedula, telefono FROM clientes WHERE id = %s",
+        (cliente_id,),
     )
     cliente = cursor.fetchone()
 
@@ -552,10 +557,9 @@ def presupuesto_pdf():
         FROM examenes_deseados ed
         JOIN examenes e ON ed.examen_id = e.id
         WHERE ed.cliente_id = %s
-    """,
+        """,
         (cliente_id,),
     )
-
     examenes = cursor.fetchall()
 
     cursor.execute(
@@ -564,14 +568,14 @@ def presupuesto_pdf():
         FROM examenes_deseados ed
         JOIN examenes e ON ed.examen_id = e.id
         WHERE ed.cliente_id = %s
-    """,
+        """,
         (cliente_id,),
     )
-
     total = cursor.fetchone()["total"]
 
     cursor.execute(
-        " INSERT INTO presupuestos (cliente_id) VALUES (%s) RETURNING id", (cliente_id,)
+        "INSERT INTO presupuestos (cliente_id) VALUES (%s) RETURNING id",
+        (cliente_id,),
     )
     numero_presupuesto = cursor.fetchone()["id"]
     conexion.commit()
@@ -581,8 +585,7 @@ def presupuesto_pdf():
 
     numero_presupuesto = f"P-{numero_presupuesto:06d}"
 
-    qr_data = f"presupuestos #{numero_presupuesto} - Cliente ID {cliente_id}"
-
+    qr_data = f"Presupuesto {numero_presupuesto} - Cliente {cliente_id}"
     qr = qrcode.make(qr_data)
     buffer = io.BytesIO()
     qr.save(buffer, format="PNG")
@@ -590,7 +593,6 @@ def presupuesto_pdf():
 
     logo_path = url_for("static", filename="img/ong.png", _external=True)
 
-    # Renderizamos el HTML del PDF
     rendered = render_template(
         "presupuesto_pdf.html",
         cliente=cliente,
@@ -602,16 +604,22 @@ def presupuesto_pdf():
         qr_base64=qr_base64,
     )
 
-    options = {"enable-local-file-access": ""}
+    # 🔥 AQUÍ ESTÁ LA CLAVE 🔥
+    if IS_PRODUCTION:
+        from weasyprint import HTML #type: ignore
 
-    # Convertimos a PDF
-    pdf = pdfkit.from_string(rendered, False, options=options, configuration=config)
+        pdf = HTML(
+            string=rendered,
+            base_url=os.getcwd()
+        ).write_pdf()
 
-    response = make_response(pdf)
-    response.headers["Content-Type"] = "application/pdf"
-    response.headers["Content-Disposition"] = "inline; filename=presupuesto.pdf"
+        response = make_response(pdf)
+        response.headers["Content-Type"] = "application/pdf"
+        response.headers["Content-Disposition"] = "inline; filename=presupuesto.pdf"
+        return response
 
-    return response
+    # 🧠 En Windows solo mostramos el HTML
+    return rendered
 
 @app.route("/autolab")
 def autolab():

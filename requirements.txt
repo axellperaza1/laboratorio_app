@@ -1,6 +1,6 @@
 Flask
 gunicorn
 psycopg2-binary
-pdfkit
+weasyprint
 python-dotenv
 qrcode[pil]

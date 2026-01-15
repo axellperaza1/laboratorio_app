@@ -12,8 +12,8 @@ import base64
 from werkzeug.utils import secure_filename
 import os
 from init_db import init_db
-
-init_db()
+if os.getenv("RAILWAY_ENVIRONMENT"):
+    init_db()
 
 
 IS_PRODUCTION = os.getenv("ENV") == "production"

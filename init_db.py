@@ -2,7 +2,7 @@ import os
 import psycopg2
 
 def init_db():
-    conn = psycopg2.connect(os.environ["postgresql://postgres:YyPhfbSsluLDQdlldOwYYaWSHCjwjCaU@postgres.railway.internal:5432/railway"])
+    conn = psycopg2.connect(os.environ["DATABASE_URL"])
     cur = conn.cursor()
 
     cur.execute("""

@@ -34,12 +34,8 @@ app.secret_key = "mi_clave_secreta"
 
 
 def conectar():
-    return psycopg2.connect(
-        dbname="laboratorio_clinico_ong",
-        user="postgres",
-        password="Aapf*18*",
-        host="localhost",
-    )
+    return psycopg2.connect(os.environ[DATABASE_URL])
+    
 
 
 # Este es el sistema de seguridad básico.

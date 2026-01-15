@@ -532,7 +532,79 @@ def agregar_examen_db():
 
     return render_template("agregar_examen_db.html", mensaje=mensaje, examenes=examenes)
 
+@app.route("/presupuesto_pdf")
+def presupuesto_pdf():
+    if "cliente_id" not in session:
+        return redirect(url_for("login"))
 
+    cliente_id = session["cliente_id"]
+
+    conexion = conectar()
+    cursor = conexion.cursor(cursor_factory=DictCursor)
+
+    # Datos del cliente
+    cursor.execute(
+        "SELECT nombre, cedula, telefono FROM clientes WHERE id = %s",
+        (cliente_id,)
+    )
+    cliente = cursor.fetchone()
+
+    # Exámenes
+    cursor.execute(
+        """
+        SELECT e.nombre_examen, e.precio
+        FROM examenes_deseados ed
+        JOIN examenes e ON ed.examen_id = e.id
+        WHERE ed.cliente_id = %s
+        """,
+        (cliente_id,)
+    )
+    examenes = cursor.fetchall()
+
+    # Total
+    cursor.execute(
+        """
+        SELECT COALESCE(SUM(e.precio), 0) AS total
+        FROM examenes_deseados ed
+        JOIN examenes e ON ed.examen_id = e.id
+        WHERE ed.cliente_id = %s
+        """,
+        (cliente_id,)
+    )
+    total = cursor.fetchone()["total"]
+
+    # Número de presupuesto
+    cursor.execute(
+        "INSERT INTO presupuestos (cliente_id) VALUES (%s) RETURNING id",
+        (cliente_id,)
+    )
+    numero_presupuesto = cursor.fetchone()["id"]
+    conexion.commit()
+
+    cursor.close()
+    conexion.close()
+
+    numero_presupuesto = f"P-{numero_presupuesto:06d}"
+
+    # QR
+    qr_data = f"Presupuesto {numero_presupuesto} - Cliente {cliente_id}"
+    qr = qrcode.make(qr_data)
+    buffer = io.BytesIO()
+    qr.save(buffer, format="PNG")
+    qr_base64 = base64.b64encode(buffer.getvalue()).decode()
+
+    logo_path = url_for("static", filename="img/ong.png")
+
+    return render_template(
+        "presupuesto_pdf.html",
+        cliente=cliente,
+        examenes=examenes,
+        total=total,
+        fecha=datetime.now().strftime("%d/%m/%Y"),
+        logo_path=logo_path,
+        numero_presupuesto=numero_presupuesto,
+        qr_base64=qr_base64,
+    )
 
 
 @app.route("/autolab")

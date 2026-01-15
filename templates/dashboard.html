@@ -1,0 +1,156 @@
+{% extends "base.html" %} {% block title %}Dashboard{% endblock %} 
+
+{% block contenido %}
+
+<section class="container my-4">
+  <!-- ================== BIENVENIDA ================== -->
+
+  <!-- ================== PERFIL CLIENTE ================== -->
+  <section class="perfil-cliente mb-5 text-center">
+    <div class="avatar-wrapper mx-auto" id="avatarWrapper">
+      <img
+        src="{{ url_for('static', filename='img/avatar-default.png') }}"
+        alt="Foto de perfil"
+        id="avatarPreview"
+      />
+      <input type="file" id="avatarInput" accept="image/*" hidden />
+    </div>
+
+    <h2 class="mt-3">
+      ¡Hola, <strong>{{ session['cliente_nombre'] }} !</strong>
+    </h2>
+
+    <p class="text-muted">Paciente registrado</p>
+  </section>
+
+  <!-- ================== SELECCIONAR EXÁMENES ================== -->
+  <div class="card mb-5 p-4 shadow-sm">
+    <h4 class="mb-3">¡Selecciona los examenes que te quieres hacer!</h4>
+
+    <form method="POST" action="{{ url_for('dashboard') }}">
+      <div class="accordion" id="accordionExamenes">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseExamenes"
+            >
+              Seleccionar exámenes disponibles
+            </button>
+          </h2>
+
+          <div
+            id="collapseExamenes"
+            class="accordion-collapse collapse"
+            data-bs-parent="#accordionExamenes"
+          >
+            <div class="accordion-body">
+              {% for ex in examenes %}
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  name="examenes"
+                  value="{{ ex.id }}"
+                  id="ex-{{ ex.id }}"
+                />
+                <label class="form-check-label" for="ex-{{ ex.id }}">
+                  <strong>{{ ex.nombre_examen }}</strong>
+                  <span class="text-muted">
+                    – {{ ex.descripcion }} –
+                    <span class="text-success fw-bold"> ${{ ex.precio }} </span>
+                  </span>
+                </label>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-primary w-100 mt-4">Confirmar exámenes</button>
+
+      <p id="mensaje" class="mt-3"></p>
+    </form>
+  </div>
+
+  <!-- ================== PENDIENTES ================== -->
+  <h4 class="mb-3">Exámenes pendientes</h4>
+
+  {% if pendientes %}
+  <ul class="list-group mb-4">
+    {% for ex in pendientes %}
+    <li
+      class="list-group-item d-flex justify-content-between align-items-center"
+    >
+      <span>{{ ex.nombre_examen }}</span>
+
+      <form
+        method="POST"
+        action="{{ url_for('quitar_examen', examen_id=ex.id) }}"
+      >
+        <button class="btn btn-sm btn-outline-danger">Quitar</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="text-muted">No tienes exámenes pendientes.</p>
+  {% endif %}
+
+  <!-- ================== TOTAL ================== -->
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Total a cancelar</h5>
+      <h4 class="mb-0 text-success fw-bold">${{ total }}</h4>
+    </div>
+  </div>
+
+  <!-- ================== PRESUPUESTO ================== -->
+  <div class="mb-5">
+    <a
+      href="{{ url_for('presupuesto_pdf') }}"
+      target="_blank"
+      class="btn btn-outline-primary"
+    >
+      Imprimir presupuesto (PDF)
+    </a>
+  </div>
+
+  <!-- ================== REALIZADOS ================== -->
+  <h4 class="mb-3">Exámenes realizados</h4>
+
+{% if realizados %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Examen</th>
+      <th>Fecha</th>
+      <th class="text-center">Resultado</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for ex in realizados %}
+    <tr>
+      <td>{{ ex.nombre_examen }}</td>
+      <td>{{ ex.fecha }}</td>
+      <td class="text-center">
+        {% if ex.archivo_pdf %}
+        <a href="/{{ ex.archivo_pdf }}" download title="Descargar resultado">
+          ⬇️
+        </a>
+        {% else %}
+        <span class="text-muted">Pendiente</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="text-muted">Aún no tienes exámenes realizados.</p>
+{% endif %} {% endblock %}
+</section>
+
+<script src="{{ url_for('static', filename='js/dashboard.js')}}"></script>

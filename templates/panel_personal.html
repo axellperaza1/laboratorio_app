@@ -1,0 +1,29 @@
+{% extends "base2.html" %}
+
+{% block title %}Panel de Personal{% endblock %}
+
+{% block contenido %}
+<h3>Subir resultados de exámenes</h3>
+
+<form method="POST" enctype="multipart/form-data">
+
+  <label>Cliente</label>
+  <select name="cliente_id" required>
+    {% for c in clientes %}
+      <option value="{{ c.id }}">{{ c.nombre }}</option>
+    {% endfor %}
+  </select>
+
+  <label>Examen</label>
+  <select name="examen_id" required>
+    {% for e in examenes %}
+      <option value="{{ e.id }}">{{ e.nombre_examen }}</option>
+    {% endfor %}
+  </select>
+
+  <label>Resultado (PDF)</label>
+  <input type="file" name="resultado_pdf" accept="application/pdf" required>
+
+  <button type="submit">Guardar resultado</button>
+</form>
+{% endblock %}

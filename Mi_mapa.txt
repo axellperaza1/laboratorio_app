@@ -1,0 +1,13 @@
+laboratorio_clinico/
+│
+├── app.py              # Backend (Flask o FastAPI)
+├── db.py               # Conexión a PostgreSQL
+├── templates/          # HTML (interfaz web)
+│   ├── index.html      # Página principal (inicio)
+│   ├── exámenes.html   # Página para consultar exámenes
+│   └── contacto.html   # Página de contacto (opcional)
+│
+├── static/             # Archivos estáticos (CSS, JS)
+│   ├── style.css       # CSS
+│   └── script.js       # JS
+└── config.py           # Configuración (base de datos, etc.)

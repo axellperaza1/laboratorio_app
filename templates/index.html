@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Laboratorio Clínico ONG</title>
+    <link rel="icon" type="image/png" href="{{ url_for ('static', filename='img/favicon.png')}}">
+    
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+   
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    
+  </head>
+
+  <!-- MODAL LOGIN -->
+  <div class="auth-modal" id="authModal">
+    <div class="auth-backdrop" id="closeAuth"></div>
+
+    <div class="auth-box">
+      <button class="auth-close" id="closeAuthBtn">×</button>
+
+      <div class="auth-icon">
+        <svg viewBox="0 0 24 24" width="64" height="64">
+          <circle cx="12" cy="8" r="4" fill="#0071e3" />
+          <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="#0071e3" />
+        </svg>
+      </div>
+
+      <h2>Iniciar sesión</h2>
+      <p>Accede a tu cuenta del laboratorio</p>
+
+      <form method="POST" action="{{ url_for('login') }}">
+        <div class="mb-3">
+          <label class="form-label">Correo electrónico</label>
+          <input type="email" name="email" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Contraseña</label>
+          <input
+            type="password"
+            name="contraseña"
+            class="form-control"
+            required
+          />
+        </div>
+
+        <button type="submit" class="btn-primary">Ingresar</button>
+      </form>
+
+      <div class="auth-footer">
+        <span>¿No tienes cuenta?</span>
+        <a href="{{ url_for('registro') }}">Regístrate</a>
+      </div>
+    </div>
+  </div>
+
+<header class="header">
+      <div class="logo">
+        <img src="{{ url_for('static', filename='img/ong.png') }}" alt="ONG" />
+      </div>
+
+      <!-- BOTÓN HAMBURGUESA -->
+      <button class="hamburger" id="hamburger">☰</button>
+
+        <div class="mobile-menu" id="mobileMenu">
+            <button class="close-menu" id="closeMenu">X</button>
+
+            <nav class="mobile-nav">
+                <a href="/">Inicio</a>
+                <a href="{{ url_for('examenes_disponibles') }}">Exámenes</a>
+                <a href="{{url_for('autolab')}}">Domicilio ONG</a>
+                <a href="#autolab">AutoLab</a>
+                <a href="{{ url_for('aliados')}}">Servicio comporativo</a>
+                <a href="#bioanalista">Bioanalista</a>
+                <a href="#personal">Nuestro Equipo</a>
+                <a href="#contacto">Contacto</a>
+                <a href="https://api.whatsapp.com/send/?phone=584145286666&text&type=phone_number&app_absent=0">Envianos un mensaje de Whatsapp</a>
+            </nav>
+         </div>
+
+
+            <!-- MENÚ -->
+            <nav class="nav" id="navMenu">
+                <a href="/">Inicio</a>
+                <a href="{{ url_for('examenes_disponibles') }}">Exámenes</a>
+                <a href="{{url_for('autolab')}}">Domicilio ONG</a>
+                <a href="#autolab">AutoLab</a>
+                <a href="#bioanalista">Bioanalista</a>
+                <a href="#personal">Nuestro Equipo</a>
+                <a href="#contacto">Contacto</a>
+                
+            </nav>
+      
+      <a href="{{ url_for('aliados')}}" class="btn-outline">Servicio Corporativo</a>
+        
+      <div class="auth-buttons">
+        <button class="btn-auth" id="openAuth">Consulta resultados</button>
+      </div>
+    </header>
+
+  <body>
+    
+<section class="hero">
+  
+  <div class="hero-slider">
+
+  <div class="hero-slide active">
+    <div class="hero-card">
+      <h1>¿Tienes algún sintoma respiratorio?</h1>
+      <p>En Laboratorio Clínico ONG tenenos la prueba de PANEL RESPIRATORIO 
+      el cuel puede detectar sintomas que aún no están reflejados.</p>
+      <a href="{{url_for('examenes_disponibles')}}" class="btn-primary"> Ver Examén</a>
+    </div>
+  </div>
+
+  <div class="hero-slide">
+    <div class="hero-card">
+      <h1>El Laboratorio va a ti</h1>
+      <p>Con Domicilios ONG realizamos la toma de muestras en tu hogar u oficina, sin esperas ni traslados.
+      </p>
+      <a href="{{url_for('autolab')}}" class="btn-primary"> DOMICILIOS ONG</a>
+    </div>
+  </div>
+
+  <div class="hero-slide">
+    <div class="hero-card">
+      <h1>Tu tiempo también es Salud</h1>
+      <p>Procesos rápidos, personal capacitado y resultados entregados con total confidencialidad.
+      </p>
+      <a href="https://api.whatsapp.com/send?phone=584145286666&text=Hola,%20quiero%20solicitar%20una%20cotizacion%20¡muchas%20gracias!" class="btn-primary">Cotizar</a>
+    </div>
+  </div>
+</div>
+ 
+  <div class="hero-dots">
+  <span class="dot active" data-slide="0"></span>
+  <span class="dot" data-slide="1"></span>
+  <span class="dot" data-slide="2"></span>
+</div>
+
+</section>
+
+
+    <section class="trust-section">
+      <div class="trust-container">
+
+        <h2 class="trust-title"> Tu salud en manos de profesionales</h2>
+        <p class="trust-subtitle"> En Laboratorio Clínico ONG combinamos tecnología, experiencia y atención
+          humana para ofrecerte resultados confiables y un servicio seguro. </p>
+      </div>
+      </div>
+
+      <div class="img-trust">
+        <img src="/static/img/profesionales.jpg" alt=" profesionales de ONG">
+      </div>
+    </section>
+
+
+    <div class="lab-content">
+    <div class="video-lab">
+        <video autoplay muted loop playsinline>
+            <source src="/static/video/video_lab_ong.mp4" type="video/mp4">
+            tu navegador no soporta este video.
+        </video>
+
+        
+    
+    </div>
+    <section class="lab-reveal">
+    <div class="lab-text">
+            <h2>¡Equipos de ultima tecnología!</h2>
+            <p>
+                Somos un laboratorio clínico comprometido con la precisión,
+                la tecnología y la atención humana. Contamos con equipos
+                modernos y personal altamente capacitado para garantizar
+                resultados confiables y rápidos.
+            </p>
+
+            <p>
+                Tu salud es nuestra prioridad. Trabajamos bajo estrictos
+                estándares de calidad para ofrecerte un servicio seguro,
+                eficiente y transparente.
+            </p>
+        </div>
+      </section>  
+    </div>
+    </div>
+
+</section>
+
+<section class="autolab-section">
+  <div class="autolab-content autolab-animate">
+
+    <!-- Texto -->
+    <div class="autolab-text" id="autolab">
+      <h2>Servicio AutoLab</h2>
+      <h3>Un servicio personalizado para que no te bajes de tu automovil</h3>
+
+      <p>
+        Con <strong>AutoLab</strong> no es necesario que te bajes de tu carro, 
+        nuestro personal capacitado saldrá del laboratorio, y con gusto te 
+        tomará la muestra, comodidad y confianza para usted.
+      </p>
+
+      <p>
+        Ideal para personas discapacitadas, con dificultad, adultos mayores o quienes prefieren
+        la comodidad.
+      </p>
+
+      <a href="https://api.whatsapp.com/send?phone=584145286666&text=Hola,%20quiero%20solicitar%20el%20servicio%20AutoLab"
+         target="_blank"
+         class="btn-primary">
+        Solicitar AutoLab
+      </a>
+    </div>
+ 
+    <!-- Imagen -->
+    <div class="autolab-img">
+      <img src="{{ url_for('static', filename='img/autolab.png') }}" alt="Servicio AutoLab">
+    </div>
+</section>
+
+<section class="partners-section">
+  <h2 class="partners-title">Estos son nuestros aliados Comerciales</h2>
+
+  <div class="partners-wrapper">
+    <div class="partners-track">
+      <!-- Logos -->
+      <img src="/static/img/aliados/logo1.png" alt="Aliado 1">
+      <img src="/static/img/aliados/logo2.jpg" alt="Aliado 2">
+      <img src="/static/img/aliados/logo3.png" alt="Aliado 3">
+      <img src="/static/img/aliados/logo4.png" alt="Aliado 4">
+      <img src="/static/img/aliados/logo5.png" alt="Aliado 5">
+      <img src="/static/img/aliados/logo7.jpeg" alt="Aliado 7">
+      <img src="/static/img/aliados/logo8.png" alt="Aliado 8">
+      <img src="/static/img/aliados/logo9.png" alt="Aliado 9">
+      <img src="/static/img/aliados/logo10.png" alt="Aliado 10">
+
+      <!-- Repetimos los logos para efecto infinito -->
+      <img src="/static/img/aliados/logo1.png" alt="Aliado 1">
+      <img src="/static/img/aliados/logo2.jpg" alt="Aliado 2">
+      <img src="/static/img/aliados/logo3.png" alt="Aliado 3">
+      <img src="/static/img/aliados/logo4.png" alt="Aliado 4">
+      <img src="/static/img/aliados/logo5.png" alt="Aliado 5">
+      <img src="/static/img/aliados/logo7.jpeg" alt="Aliado 7">
+      <img src="/static/img/aliados/logo8.png" alt="Aliado 8">
+      <img src="/static/img/aliados/logo9.png" alt="Aliado 9">
+      <img src="/static/img/aliados/logo10.png" alt="Aliado 10">
+    </div>
+  </div>
+</section>
+
+<section class="aliados-impacto" id="aliados-impacto">
+<h2>
+  <span id="contador">0</span>+
+</h2>
+<p  class="titulo">Más de 20 aliados felices con nuestro servicio</p>
+<p class="subtitulo"> Sé parte de uno de ellos</p>
+
+<a href="{{url_for ('aliados')}}" class="cta-aliados">Conviertete en aliado comercial</a>
+</section>
+
+<section class="bioanalista-section scroll-animate">
+  <div class="bioanalista-container">
+
+    <!-- Imagen -->
+    <div class="bioanalista-image">
+      <img src="/static/img/bioanalista-belkis.jpg" alt="Bioanalista del Laboratorio Clínico ONG">
+    </div>
+
+    <!-- Texto -->
+    <div class="bioanalista-text" id="bioanalista">
+      <h2>Bioanalista Encargado</h2>
+      <h3>Licda. Belkis B. Colina R.</h3>
+      <p>C.B. 11-0655-9998<p>
+
+      <p>
+        En el Laboratorio Clínico ONG contamos con profesionales altamente
+        capacitados. Nuestro bioanalista encargado garantiza precisión,
+        ética y confiabilidad en cada resultado.
+      </p>
+
+      <p>
+        Más de <strong>20 años de experiencia</strong> respaldando diagnósticos
+        clínicos con tecnología de última generación.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<section class="personal-section scroll-personal">
+  <h2>Nuestro Personal</h2>
+  <p class="personal-subtitle">
+    Un equipo capacitado, humano y comprometido con tu bienestar.
+  </p>
+
+  <div class="personal-grid">
+    <div class="personal-item" id="personal">
+      <img src="{{ url_for('static', filename='img/personal1.jpg') }}" alt="Personal laboratorio">
+      <span>Toma de muestras / Área Técnica</span>
+    </div>
+
+    <div class="personal-item">
+      <img src="{{ url_for('static', filename='img/personal2.jpg') }}" alt="Personal laboratorio">
+      <span>Toma de muestras / Área Técnica</span>
+    </div>
+
+    <div class="personal-item">
+      <img src="{{ url_for('static', filename='img/personal3.jpg') }}" alt="Personal laboratorio">
+      <span>Atención al paciente</span>
+    </div>
+  </div>
+</section>
+
+    <section class="map-section">
+      <h2>¡Nunca te pierdas!</h2>
+      <p>Laboratorio Clínico ONG en Barquisimeto</p>
+      <div class="map-container">
+        <iframe
+          src="https://www.google.com/maps?q=Laboratorio+Clinico+ONG&output=embed"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        >
+        </iframe>
+      </div>
+    </section>
+
+    <footer class="footer" id="contacto">
+      <div class="footer-container">
+        <div class="footer-section">
+          <h3>Laboratorio Clínico ONG</h3>
+          <p>
+            Plataforma digital del Laboratorio Clínico ONG Donde puede realizar
+            sus consultas de manera segura y confidencial
+          </p>
+        </div>
+
+        <div class="footer-section">
+  <h4>Síguenos</h4>
+
+       <div class="social-icons">
+            <a href="https://www.instagram.com/laboratorioclinicoongca/" target="_blank" aria-label="Instagram">
+             <i class="fab fa-instagram"></i>
+            </a>
+
+            <a href="https://www.facebook.com/" target="_blank" aria-label="Facebook">
+            <i class="fab fa-facebook-f"></i>
+            </a>
+
+             <a href="https://api.whatsapp.com/send?phone=584145286666" target="_blank" aria-label="WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+            </a>
+          </div>
+       </div>
+
+        <div class="footer-section">
+          <h4>Servicios</h4>
+          <ul>
+            <li><a href="/examenes">Exámenes</a></li>
+            <li><a href="/registro">Registrarse</a></li>
+            <li><a href="{{ url_for ('aliados')}}">Servicio Corporativo</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4>Contacto</h4>
+          <ul>
+            <li>📍 Barquisimeto, Venezuela</li>
+            <li>📞 +58 414-5286666</li>
+            <li>✉️ laboratorioclinicoongca@gmail.com</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        © 2026 Laboratorio Clínico ONG, C.A. J-29703979-1<br />Powered by Axell Peraza
+      </div>
+    </footer>
+
+<!-- BOTÓN FLOTANTE AUTOLAB -->
+<button class="autolab-float" id="openAutoLab" aria-label="AutoLab">
+  <i class="fas fa-car-side"></i>
+</button>
+
+<!-- MODAL AUTOLAB -->
+<div class="autolab-modal" id="autolabModal">
+  <div class="autolab-backdrop" id="closeAutoLab"></div>
+
+  <div class="autolab-box">
+    <button class="autolab-close" id="closeAutoLabBtn">×</button>
+
+    <h2>Servicio a domicilio</h2>
+    <p>
+      Solicita tu servicio a domicilio, llegamos a donde nos indique.
+    </p>
+
+    <div class="autolab-actions">
+      <a
+        href="https://api.whatsapp.com/send?phone=584145286666&text=Hola,%20quiero%20solicitar%20el%20servicio%20AutoLab"
+        target="_blank"
+        class="autolab-btn whatsapp"
+      >
+        <i class="fab fa-whatsapp"></i> WhatsApp
+      </a>
+
+      <a
+        href="https://calendly.com/TU_USUARIO/autolab"
+        target="_blank"
+        class="autolab-btn calendar"
+      >
+        <i class="far fa-calendar-alt"></i> Agendar cita
+      </a>
+
+      <a
+        href="{{ url_for('autolab') }}"
+        class="autolab-btn location"
+      >
+        <i class="fas fa-map-marker-alt"></i> Pagina a domicilio
+      </a>
+    </div>
+  </div>
+</div>
+
+    <!-- BOTÓN FLOTANTE PREMIUM -->
+<div class="floating-btn">
+  <a
+    href="https://api.whatsapp.com/send?phone=584145286666&text=Hola,%20quiero%20información%20sobre%20sus%20servicios"
+    target="_blank"
+    class="floating-link"
+    aria-label="WhatsApp"
+  >
+    <i class="fab fa-whatsapp"></i>
+    <span class="tooltip-advanced">Escríbenos</span>
+  </a>
+</div>
+
+
+<button class="mobile-cotizar-btn" id="mobileCotizar">👤</button>
+<!--Contador de aliados comerciales-->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+
+  const contador = document.getElementById("contador");
+  const seccion = document.getElementById("aliados-impacto");
+
+  let valorFinal = 20;
+  let valorActual = 0;
+  let iniciado = false;
+
+  const incrementar = () => {
+    if (valorActual < valorFinal) {
+      valorActual++;
+      contador.textContent = valorActual;
+      setTimeout(incrementar, 20);
+    }
+  };
+
+  const observar = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting && !iniciado) {
+      iniciado = true;
+      incrementar();
+    }
+  }, { threshold: 0.99 });
+
+   observar.observe(seccion);
+  });
+  
+</script>
+
+<script>
+
+
+  const trustObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("show");
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll(".trust-item").forEach(item => {
+    trustObserver.observe(item);
+  });
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const slides = document.querySelectorAll(".hero-slide");
+  const dots = document.querySelectorAll(".dot");
+  let current = 0;
+
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.classList.toggle("active", i === index);
+      dots[i].classList.toggle("active", i === index);
+    });
+  }
+
+  function nextSlide() {
+    current = (current + 1) % slides.length;
+    showSlide(current);
+  }
+
+  dots.forEach((dot, index) => {
+    dot.addEventListener("click", () => {
+      current = index;
+      showSlide(current);
+    });
+  });
+
+  setInterval(nextSlide, 6000);
+});
+</script>
+
+<script>
+  const scrollObserver = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
+        
+        }
+      });
+    },
+    {
+      threshold: 0.35
+    }
+  );
+
+  document.querySelectorAll(".scroll-animate").forEach(el => {
+    scrollObserver.observe(el);
+  });
+</script>
+
+<script>
+  const mobileCotizar = document.getElementById("mobileCotizar");
+  const authModall = document.getElementById("authModall");
+
+    mobileCotizar.addEventListener("click", () => {
+      authModal.classList.add("active");
+    });
+</script>
+
+<script>
+  const reveals = document.querySelectorAll(".lab-reveal");
+
+  const observerr = new IntersectionObserver(
+    estries => {
+      estries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("active");
+        
+        }
+      });
+    },
+    {
+      threshold: 0.15
+    }
+  );
+
+  reveals.forEach(el => observerr.observe(el));
+</script>
+
+<script>
+  const openAutoLab = document.getElementById("openAutoLab");
+  const autolabModal = document.getElementById("autolabModal");
+  const closeAutoLab = document.getElementById("closeAutoLab");
+  const closeAutoLabBtn = document.getElementById("closeAutoLabBtn");
+
+  openAutoLab.addEventListener("click", () => {
+    autolabModal.classList.add("active");
+  });
+
+  closeAutoLab.addEventListener("click", () => {
+    autolabModal.classList.remove("active");
+  });
+
+  closeAutoLabBtn.addEventListener("click", () => {
+    autolabModal.classList.remove("active");
+  });
+</script>
+
+    <script>
+  window.addEventListener("load", () => {
+    const btn = document.querySelector(".floating-btn");
+    btn.style.opacity = "0";
+    btn.style.transform = "scale(0.8)";
+
+    setTimeout(() => {
+      btn.style.transition = "all 0.6s ease";
+      btn.style.opacity = "1";
+      btn.style.transform = "scale(1)";
+    }, 800);
+  });
+</script>
+
+<script>
+  const tooltip = document.querySelector(".tooltip-advanced");
+
+  if (!localStorage.getItem("tooltipSeen")) {
+    setTimeout(() => {
+      tooltip.style.opacity = "1";
+      tooltip.style.transform = "translateY(50%) translateX(0)";
+    }, 1500);
+
+    setTimeout(() => {
+      tooltip.style.opacity = "0";
+      tooltip.style.transform = "translateY(50%) translateX(10px)";
+      localStorage.setItem("tooltipSeen", "true");
+    }, 6000);
+  }
+</script>
+
+    <!---REACT-->
+    <div id="react-root"></div>
+    <script type="module" src="/static/js/react/main.jsx"></script>
+
+    <!-- React -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+<!-- Babel (para escribir JSX fácil) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<!-- Tu React -->
+    <script type="text/babel" src="{{ url_for('static', filename='js/react/componentes/FloatingAutoLab.jsx') }}"></script>
+
+
+    <!-- JS HAMBURGUESA -->
+    <script>
+        const hamburger = document.getElementById("hamburger");
+        const mobileMenu = document.getElementById("mobileMenu");
+        const closeMenu = document.getElementById("closeMenu");
+        
+        hamburger.addEventListener("click", () => { 
+            mobileMenu.classList.add("active");
+        });
+
+        closeMenu.addEventListener("click", () => { 
+            mobileMenu.classList.remove("active");
+        });
+
+        document.querySelectorAll(".mobile-nav a").forEach(link => {
+            link.addEventListener("click", () => {
+              mobileMenu.classList.remove("active");
+           });
+        });
+    </script>
+
+    <script>
+      window.addEventListener("scroll", () => {
+        const header = document.querySelector(".header");
+        if (window.scrollY > 40) {
+          header.classList.add("scrolled");
+        
+        }
+      });
+    </script>
+
+    <script>
+      const openAuth = document.getElementById("openAuth");
+      const authModal = document.getElementById("authModal");
+      const closeAuth = document.getElementById("closeAuth");
+      const closeAuthBtn = document.getElementById("closeAuthBtn");
+
+      openAuth.addEventListener("click", () => {
+        authModal.classList.add("active");
+      });
+
+      closeAuth.addEventListener("click", () => {
+        authModal.classList.remove("active");
+      });
+
+      closeAuthBtn.addEventListener("click", () => {
+        authModal.classList.remove("active");
+      });
+    </script>
+
+
+
+    <script>
+        const observer = new IntersectionObserver(
+            entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("show");
+                    
+                    }
+                });
+            },
+            {
+                threshold: 0.35
+            }
+        );
+
+        document.querySelectorAll(".video-lab").forEach(el => {
+            observer.observe(el)
+        });
+    </script>
+
+    <script>
+  const autolabObserver = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
+        
+        }
+      });
+    },
+    { threshold: 0.35 }
+  );
+
+  document.querySelectorAll(".autolab-animate").forEach(el => {
+    autolabObserver.observe(el);
+  });
+</script>
+
+
+
+  </body>
+</html>

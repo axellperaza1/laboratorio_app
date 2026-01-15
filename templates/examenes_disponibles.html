@@ -1,0 +1,113 @@
+{% extends "global2.html" %} {% block title %}Exámenes disponibles{% endblock %}
+{% block content %}
+ 
+  <div class="search-box">
+  <input
+    type="text"
+    id="searchInput"
+    placeholder="Buscar exámenes..."
+  />
+</div>
+
+
+<section class="examenes-list">
+  {% for examen in examenes %}
+  <div class="examen-row">
+    <!-- Imagen -->
+    <div class="examen-img">
+      <img
+        src="{{ url_for('static', filename=examen.imagen) }}"
+        alt="{{ examen.nombre_examen }}"
+        loading="lazy"
+      />
+    </div>
+
+    <!-- Contenido -->
+    <div class="examen-info">
+      <h2>{{ examen.nombre_examen }}</h2>
+
+      <p class="examen-desc">{{ examen.descripcion }}</p>
+
+
+      <!--Por los momentos no se usará-->
+      <!--<p class="examen-precio">{{ examen.precio }} USD</p>-->
+    
+    
+      <button>
+      <a
+        href="https://api.whatsapp.com/send?phone=584145286666&text=Hola,%20me%20gustaría%20recibir%20información%20y%20cotizar%20el%20examen:%20{{ examen.nombre_examen }}."
+        target="_blank"
+        class="btn-primary"
+      >
+        Cotizar
+      </a>
+    </button>
+    </div>
+  </div>
+  {% else %}
+  <p style="text-align: center">No hay exámenes disponibles</p>
+  {% endfor %}
+</section>
+<div class="examen-row">...</div>
+
+<!-- BOTÓN FLOTANTE AUTOLAB -->
+<button class="autolab-float" id="openAutoLab" aria-label="AutoLab">
+  <i class="fas fa-car-side"></i>
+</button>
+
+<!-- MODAL AUTOLAB -->
+<div class="autolab-modal" id="autolabModal">
+  <div class="autolab-backdrop" id="closeAutoLab"></div>
+
+  <div class="autolab-box">
+    <button class="autolab-close" id="closeAutoLabBtn">×</button>
+
+    <h2>Servicio a domicilio</h2>
+    <p>
+      Solicita tu servicio a domicilio, llegamos a donde nos indique.
+    </p>
+
+    <div class="autolab-actions">
+      <a
+        href="https://api.whatsapp.com/send?phone=584145286666&text=Hola,%20quiero%20solicitar%20el%20servicio%20AutoLab"
+        target="_blank"
+        class="autolab-btn whatsapp"
+      >
+        <i class="fab fa-whatsapp"></i> WhatsApp
+      </a>
+
+      <a
+        href="https://calendly.com/TU_USUARIO/autolab"
+        target="_blank"
+        class="autolab-btn calendar"
+      >
+        <i class="far fa-calendar-alt"></i> Agendar cita
+      </a>
+
+      <a
+        href="{{ url_for('autolab') }}"
+        class="autolab-btn location"
+      >
+        <i class="fas fa-map-marker-alt"></i> Pagina a domicilio
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- BOTÓN FLOTANTE PREMIUM -->
+<div class="floating-btn">
+  <a
+    href="https://api.whatsapp.com/send?phone=584145286666&text=Hola,%20quiero%20información%20sobre%20sus%20servicios"
+    target="_blank"
+    class="floating-link"
+    aria-label="WhatsApp"
+  >
+    <i class="fab fa-whatsapp"></i>
+    <span class="tooltip-advanced">Escríbenos</span>
+  </a>
+</div>
+
+
+<button class="mobile-cotizar-btn" id="mobileCotizar">👤</button>
+
+{% endblock %}

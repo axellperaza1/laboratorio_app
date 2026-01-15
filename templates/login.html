@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Iniciar sesión{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block contenido %}
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow-lg p-4 login-card">
+            <h1>Iniciar sesión</h1>
+
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label">Correo electrónico</label>
+                    <input type="email" name="email" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Contraseña</label>
+                    <input type="password" name="contraseña" class="form-control" required>
+                </div>
+
+                <button class="btn btn-primary">Entrar</button>
+            </form>
+            {% if error%}
+            <div class="alert alert-danger text-center">
+                {{ error }}
+            </div>
+            {% endif %}
+            <div class="login-links">
+                <a href="{{ url_for('registro') }}">¿Aún no tienes cuenta?</a><br>
+                <a href="{{ url_for('index') }}">Volver al inicio</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

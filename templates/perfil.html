@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Mi Perfil{% endblock %}
+
+{% block contenido %}
+
+<h2 class="mb-4">Mi perfil</h2>
+
+<div class="card shadow-sm p-4">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <strong>Nombre</strong>
+            <p>{{ cliente.nombre }}</p>
+        </div>
+
+        <div class="col-md-6">
+            <strong>Correo</strong>
+            <p>{{ cliente.email }}</p>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <strong>Cédula</strong>
+            <p>{{ cliente.cedula }}</p>
+        </div>
+
+        <div class="col-md-6">
+            <strong>Teléfono</strong>
+            <p>{{ cliente.telefono }}</p>
+        </div>
+    </div>
+
+    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary mt-3">
+        Volver al dashboard
+    </a>
+</div>
+
+{% endblock %}

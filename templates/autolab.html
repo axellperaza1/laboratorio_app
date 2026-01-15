@@ -1,0 +1,45 @@
+{% extends "global2.html" %} {% block title %}AutoLab · Servicio a domicilio{%
+endblock %}
+
+{% block content %}
+
+<section class="autolab-hero">
+  <h1>SERVICIO A DOMICILIO ONG</h1>
+  <p>El laboratorio va hasta ti</p>
+</section>
+
+<section class="autolab-info">
+  <div class="autolab-content autolab-animate">
+    <div class="autolab-text">
+      <h2>Servicio de toma de muestras a domicilio</h2>
+      <p>
+        DOMICILIO ONG está diseñado para brindarte comodidad, rapidez y seguridad.
+        Nuestro personal acude hasta tu hogar u oficina para realizar la toma de
+        muestras clínicas. Recuerda que tu salud es nuestra prioridad, y si debemos ir, allí estaremos.
+      </p>
+
+      <ul>
+        <li>✔ Atención profesional</li>
+        <li>✔ Bioseguridad garantizada</li>
+        <li>✔ Resultados confiables</li>
+      </ul>
+    </div>
+
+
+    <div class="autolab-img">
+      <img src="{{ url_for('static', filename='img/autolab.png') }}" />
+    </div>
+  </div>
+
+     <Button>
+    <a
+         href="https://api.whatsapp.com/send?phone=584145286666&text=Hola,%20quiero%20solicitar%20el%20servicio%20DOMICILIO"
+      target="_blank"
+      class="btn-primary"
+     >
+          Agendar DOMICILIO
+     </a>
+     </Button>
+</section>
+
+{% endblock %}

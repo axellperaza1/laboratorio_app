@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Examen Realizado</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <h1>Registrar Examen Realizado</h1>
+    <form method="POST">
+        <form method="POST" class="container mt-5">
+    <div class="mb-3">
+        <label for="paciente_id" class="form-label">Seleccionar Paciente:</label>
+        <select id="paciente_id" name="paciente_id" class="form-control" required>
+            {% for paciente in pacientes %}
+                <option value="{{ paciente['id'] }}">{{ paciente['nombre'] }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="examen_id" class="form-label">Seleccionar Examen:</label>
+        <select id="examen_id" name="examen_id" class="form-control" required>
+            {% for examen in examenes %}
+                <option value="{{ examen['id'] }}">{{ examen['nombre_examen'] }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="fecha" class="form-label">Fecha:</label>
+        <input type="date" id="fecha" name="fecha" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="resultado" class="form-label">Resultado:</label>
+        <textarea id="resultado" name="resultado" class="form-control" required></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Registrar Examen</button>
+</form>
+
+    </form>
+    <a href="{{url_for('panel_personal')}}">Volver al inicio</a>
+</body>
+</html>

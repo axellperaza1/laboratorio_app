@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Presupuesto</title>
+
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        color: #333;
+        margin: 40px;
+      }
+
+      /* ===== HEADER ===== */
+      .header {
+        display: table;
+        width: 100%;
+        border-bottom: 3px solid #7a1f2b;
+        padding-bottom: 15px;
+        margin-bottom: 25px;
+      }
+
+      .header-left {
+        display: table-cell;
+        width: 40%;
+      }
+
+      .header-right {
+        display: table-cell;
+        width: 60%;
+        text-align: right;
+        vertical-align: middle;
+      }
+
+      .logo {
+        height: 150px;
+        width: 150px;
+        margin-bottom: 10px;
+      }
+
+      .lab-name {
+        font-size: 20px;
+        font-weight: bold;
+        color: #7a1f2b;
+      }
+
+      .lab-info {
+        font-size: 11px;
+        color: #666;
+      }
+
+      /* ===== INFO ===== */
+      .info-box {
+        background: #f6f6f6;
+        padding: 12px;
+        margin-bottom: 20px;
+      }
+
+      .info-box strong {
+        color: #7a1f2b;
+      }
+
+      /* ===== TABLE ===== */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      thead {
+        background: #7a1f2b;
+        color: white;
+      }
+
+      th,
+      td {
+        padding: 10px;
+        border: 1px solid #ddd;
+      }
+
+      tbody tr:nth-child(even) {
+        background: #f9f9f9;
+      }
+
+      .price {
+        text-align: right;
+      }
+
+      /* ===== TOTAL ===== */
+      .total {
+        margin-top: 20px;
+        text-align: right;
+        font-size: 16px;
+      }
+
+      .total span {
+        color: #7a1f2b;
+        font-weight: bold;
+        font-size: 20px;
+      }
+
+      /* ===== FOOTER ===== */
+      .footer {
+        margin-top: 40px;
+        font-size: 10px;
+        color: #777;
+        text-align: center;
+        border-top: 1px solid #ddd;
+        padding-top: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-left">
+        <img src="{{ logo_path }}" alt="Logo" class="logo" />
+      </div>
+
+      <div class="header-right">
+        <p><strong>Presupuesto N°:</strong> {{ numero_presupuesto }}</p>
+        <p><strong>Fecha:</strong> {{ fecha }}</p>
+        <div class="lab-name">Laboratorio Clínico ONG</div>
+        <div class="lab-info">
+          Presupuesto de Exámenes<br />
+          Fecha: {{ fecha }}
+        </div>
+      </div>
+    </div>
+
+    <!-- CLIENT -->
+    <div class="info-box">
+      <strong>Paciente:</strong> {{ cliente.nombre }}<br />
+      <strong>Cédula:</strong> {{ cliente.cedula }}<br />
+      <strong>Teléfono:</strong> {{ cliente.telefono }}
+    </div>
+
+    <!-- TABLE -->
+    <table>
+      <thead>
+        <tr>
+          <th>Examen</th>
+          <th class="price">Precio</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ex in examenes %}
+        <tr>
+          <td>{{ ex.nombre_examen }}</td>
+          <td class="price">${{ "%.2f"|format(ex.precio) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- TOTAL -->
+    <div class="total">
+      Total a pagar: <span>${{ "%.2f"|format(total) }}</span>
+    </div>
+    <div class="qr">
+      <img src="data:image/png;base64, {{ qr_base64 }}" width="120" />
+      <p style="font-size: 11px">Escanea para validar el presupuesto</p>
+    </div>
+    <!-- FOOTER -->
+    <div class="footer">
+      El monto en Dólares está sujeto a la tasa del Banco Central De.<br />
+      © {{ fecha[-4:] }} Laboratorio Clínico ONG
+    </div>
+  </body>
+</html>

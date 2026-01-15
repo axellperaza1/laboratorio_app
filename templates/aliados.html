@@ -1,0 +1,123 @@
+{% extends "global2.html" %}
+{% block title %}Aliados · Laboratorio Clínico ONG{% endblock %}
+
+{% block content %}
+
+<section class="aliados-hero">
+  <div class="aliados-hero-content">
+    <h1>Conviértete en aliado comercial del Laboratorio Clínico ONG</h1>
+    <p>
+      Expande tus servicios, mejora tus resultados y crece junto a un laboratorio
+      comprometido con la calidad y la tecnología.
+    </p>
+
+    <a href="#contacto-aliados" class="btn-primary">
+      Solicitar información
+    </a>
+  </div>
+</section>
+
+<section class="aliados-info">
+  <div class="aliados-container">
+
+    <div class="aliados-block">
+      <h2>¿Por qué eleigir Laboratorio Clínico ONG?</h2>
+      <p>
+        La salud de tus trabajadoress es la base de productividad de tu empresa.
+        En Laboratorio Clínico ONG, te ofrecemos la mejor opción para tu equipo de trabajo.
+      </p>
+    </div>
+
+    <div class="aliados-block">
+      <h2>Beneficios</h2>
+      <ul>
+        <li>✔ Resultados confiables y oportunos</li>
+        <li>✔ Atención prioritaria</li>
+        <li>✔ Soporte directo y humano</li>
+        <li>✔ Imagen corporativa sólida</li>
+        <li>✔ Crecimiento conjunto</li>
+      </ul>
+    </div>
+
+    <div class="aliados-block">
+      <h2>Requisitos básicos</h2>
+      <ul>
+        <li>RIF de la empresa aliarse</li>
+        <li>Correo Electronico</li>
+        <li>Responsable de la solicitud con su respectivo número de telefono</li>
+        <li>Interés en relación a largo plazo</li>
+      </ul>
+    </div>
+
+    <div class="aliados-block">
+      <h2>¿Cómo unirse?</h2>
+      <ol>
+        <li>Rellena el formulario y envia los requisitos</li>
+        <li>Pautamos una cita</li>
+        <li>Contacto por Whatsapp</li>
+        <li>Inicio de operaciones</li>
+      </ol>
+    </div>
+
+  </div>
+</section>
+
+<form 
+action="https://formspree.io/f/mojjvjlq"
+method="POST"
+enctype="multipart/form-data"
+class="form-aliados"
+>
+  <h2>Solicitud de Alianza</h2>
+  <input type="hidden" name="Motivo" value="Aliado Corporativo">
+  <input type="text" placeholder="Nombre de la empresa" required>
+  <input type="text" placeholder="RIF / Identificación" required>
+
+  <select name="Empresa Solicitante" required>
+    <option value="">Tipo de empresa</option>
+    <option>Clínica</option>
+    <option>Laboratorio</option>
+    <option>Panaderia</option>
+    <option>Aseguradora</option>
+    <option>Óptica</option>
+    <option>Tienda de ropa</option>
+    <option>Funerarias</option>
+    <option>Restaurante</option>
+    <option>Trabajador Freelancer</option>
+    <option>Sector Público</option>
+    <option>Empresa de seguridad</option>
+    <option>Empresa de radiografia</option>
+    <option>Área de tecnologia</option>
+    <option>Servicios Financiero</option>
+    <option>Consecionarios</option>
+    <option>Farmacias</option>
+    <option>Gym</option>
+    <option>Otros</option>
+  </select>
+
+  <input type="text" name="Respontable" placeholder="Nombre del responsable" required>
+  <input type="email" name="email"  placeholder="Correo electrónico" required>
+  <input type="tel" name="telefono" placeholder="Teléfono" required>
+
+  <label>Documentos</label>
+  <input type="file" accept=".pdf,.jpg,.png" multiple required>
+
+  <textarea name="Motivo del Mensaje" placeholder="Cuéntanos sobre tu empresa"></textarea>
+
+  <button type="submit">Enviar solicitud</button>
+</form>
+
+<section class="aliados-cta" id="contacto-aliados">
+  <h2>¿Te interesa formar parte?</h2>
+  <p>Escríbenos y conversemos sobre cómo podemos trabajar juntos.</p>
+
+  <a
+    href="https://api.whatsapp.com/send?phone=584145286666&text=Hola,%20quiero%20ser%20aliado%20del%20Laboratorio%20ONG"
+    target="_blank"
+    class="btn-primary"
+  >
+    Contactar por WhatsApp
+  </a>
+</section>
+
+{% endblock %}

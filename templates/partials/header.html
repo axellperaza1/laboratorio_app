@@ -1,0 +1,45 @@
+<header class="header">
+  <div class="logo">
+    <img src="{{ url_for('static', filename='img/ong.png') }}" alt="ONG">
+  </div>
+
+  <!-- HAMBURGUESA (solo mobile) -->
+  <button class="hamburger" id="hamburger">☰</button>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="close-menu" id="closeMenu">✕</button>
+
+    <nav class="mobile-nav">
+                <a href="/">Inicio</a>
+                <a href="{{ url_for('examenes_disponibles') }}">Exámenes</a>
+                <a href="{{url_for('autolab')}}">Domicilio ONG</a>
+                <a href="#autolab">AutoLab</a>
+                <a href="{{ url_for('aliados')}}">Servicio comporativo</a>
+                <a href="#bioanalista">Bioanalista</a>
+                <a href="#personal">Nuestro Equipo</a>
+                <a href="#contacto">Contacto</a>
+                <a href="https://api.whatsapp.com/send/?phone=584145286666&text&type=phone_number&app_absent=0">Envianos un mensaje de Whatsapp</a>
+            </nav>
+         </div>
+
+
+            <!-- MENÚ -->
+            <nav class="nav" id="navMenu">
+                <a href="/">Inicio</a>
+                <a href="{{ url_for('examenes_disponibles') }}">Exámenes</a>
+                <a href="{{url_for('autolab')}}">Domicilio ONG</a>
+                <a href="#autolab">AutoLab</a>
+                <a href="#bioanalista">Bioanalista</a>
+                <a href="#personal">Nuestro Equipo</a>
+                <a href="#contacto">Contacto</a>
+                
+            </nav>
+
+ 
+    <a href="{{ url_for('aliados')}}" class="btn-outline">Servicio Corporativo</a>
+        
+      <div class="auth-buttons">
+        <button class="btn-auth" id="openAuth">Acceso Pacientes</button>
+      </div>
+    </header>

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Login Personal{% endblock %}
+
+{% block contenido %}
+
+{% if mensaje %}
+<div class="alert alert-success">
+    {{ mensaje }}
+</div>
+{% endif %}
+
+
+<div class="login-container">
+    <h2>Iniciar Sesion</h2>
+
+    <form method="POST">
+        <label for="cedula">Cédula</label>
+        <input type="text" name="cedula" required>
+
+        <label for="contraseña">Contraseña</label>
+        <input type="password" name="contraseña" required>
+
+        <button type="submit">Ingresar</button>
+    </form>
+
+    <a href="{{url_for('agregar_examen_db')}}">
+        <button>Admin</button>
+    </a>
+</div>
+{%endblock%}

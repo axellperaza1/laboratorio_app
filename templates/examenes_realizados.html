@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Examenes Realizados</title>
+</head>
+<body>
+    <h1>Exámenes Realizados por el Paciente</h1>
+
+    <h2>Lista de Exámenes</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre del Examen</th>
+                <th>Fecha</th>
+                <th>Resultado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for examen in examenes %}
+            <tr>
+                <td>{{ examen['nombre'] }}</td>
+                <td>{{ examen['fecha'] }}</td>
+                <td>{{ examen['resultado'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="/">Volver al inicio</a>
+</body>
+</html>

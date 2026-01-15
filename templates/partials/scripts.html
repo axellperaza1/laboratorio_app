@@ -1,0 +1,167 @@
+<script>
+  // MENU MOBILE
+  const hamburger = document.getElementById("hamburger");
+  const mobileMenu = document.getElementById("mobileMenu");
+  const closeMenu = document.getElementById("closeMenu");
+
+  hamburger?.addEventListener("click", () => {
+    mobileMenu.classList.add("active");
+  });
+
+  closeMenu?.addEventListener("click", () => {
+    mobileMenu.classList.remove("active");
+  });
+
+  // MODAL AUTH
+  const openAuth = document.getElementById("openAuth");
+  const authModal = document.getElementById("authModal");
+  const closeAuth = document.getElementById("closeAuth");
+  const closeAuthBtn = document.getElementById("closeAuthBtn");
+
+  openAuth?.addEventListener("click", () => {
+    authModal.classList.add("active");
+  });
+
+  closeAuth?.addEventListener("click", () => {
+    authModal.classList.remove("active");
+  });
+
+  closeAuthBtn?.addEventListener("click", () => {
+    authModal.classList.remove("active");
+  });
+
+  // HEADER STICKY
+  window.addEventListener("scroll", () => {
+    document.querySelector(".header")
+      ?.classList.toggle("scrolled", window.scrollY > 40);
+  });
+</script>
+
+<script>
+        const observer = new IntersectionObserver(
+            entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("show");
+                    } else {
+                        entry.target.classList.remove("show");
+                    }
+                });
+            },
+            {
+                threshold: 0.35
+            }
+        );
+
+        document.querySelectorAll(".examen-row").forEach(el => {
+            observer.observe(el)
+        });
+</script>
+
+<script>
+  const whatsappBtn = document.querySelector('.whatsapp-float');
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 200) {
+      whatsappBtn.style.opacity = '1';
+      whatsappBtn.style.transform = 'translateY(0)';
+    } else {
+      whatsappBtn.style.opacity = '0';
+      whatsappBtn.style.transform = 'translateY(20px)';
+    }
+  });
+</script>
+
+<script>
+  const observar = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
+        } else {
+          entry.target.classList.remove("show");
+        }
+      });
+    },
+    { threshold: 0.35 }
+  );
+
+  document.querySelectorAll(".autolab-content").forEach(el => {
+    observar.observe(el);
+  });
+</script>
+
+<!--Este script funciona en la barra de busqueda -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const searchInput = document.getElementById("searchInput");
+  const examItems = document.querySelectorAll(".examen-row");
+
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase().trim();
+
+    examItems.forEach(item => {
+      const text = item.innerText.toLowerCase();
+
+      if (text.includes(query)) {
+        item.style.display = "block";
+        item.style.opacity = "1";
+      } else {
+        item.style.display = "none";
+      }
+    });
+  });
+});
+</script>
+
+<script>
+  const autolabObserver = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
+        } 
+        
+      });
+    },
+    { threshold: 0.35 }
+  );
+
+  document.querySelectorAll(".autolab-animate").forEach(el => {
+    autolabObserver.observe(el);
+  });
+</script>
+    
+<script>
+  const openAutoLab = document.getElementById("openAutoLab");
+  const autolabModal = document.getElementById("autolabModal");
+  const closeAutoLab = document.getElementById("closeAutoLab");
+  const closeAutoLabBtn = document.getElementById("closeAutoLabBtn");
+
+  openAutoLab.addEventListener("click", () => {
+    autolabModal.classList.add("active");
+  });
+
+  closeAutoLab.addEventListener("click", () => {
+    autolabModal.classList.remove("active");
+  });
+
+  closeAutoLabBtn.addEventListener("click", () => {
+    autolabModal.classList.remove("active");
+  });
+</script>
+
+<script>
+  window.addEventListener("load", () => {
+    const btn = document.querySelector(".floating-btn");
+    btn.style.opacity = "0";
+    btn.style.transform = "scale(0.8)";
+
+    setTimeout(() => {
+      btn.style.transition = "all 0.6s ease";
+      btn.style.opacity = "1";
+      btn.style.transform = "scale(1)";
+    }, 800);
+  });
+</script>
+

@@ -3,3 +3,4 @@ gunicorn
 psycopg2-binary
 pdfkit
 python-dotenv
+qrcode[pil]

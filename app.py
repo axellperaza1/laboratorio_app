@@ -12,6 +12,7 @@ import io
 import base64
 from werkzeug.utils import secure_filename
 import os
+from weasyprint import HTML
 
 
 

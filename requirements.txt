@@ -1,6 +1,6 @@
 Flask
 gunicorn
 psycopg2-binary
-WeasyPrint==60.2
+WeasyPrint
 python-dotenv
 qrcode[pil]

@@ -1,0 +1,30 @@
+FROM python:3.11-slim
+
+# Instalar dependencias del sistema para WeasyPrint
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libcairo2 \
+    libpango-1.0-0 \
+    libpangocairo-1.0-0 \
+    libgdk-pixbuf2.0-0 \
+    libffi-dev \
+    libxml2 \
+    libxslt1.1 \
+    shared-mime-info \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Directorio de trabajo
+WORKDIR /app
+
+# Copiar requirements
+COPY requirements.txt .
+
+# Instalar dependencias Python
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copiar proyecto
+COPY . .
+
+# Comando de inicio (ajústalo a tu app)
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:8080"]

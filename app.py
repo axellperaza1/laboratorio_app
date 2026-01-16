@@ -579,10 +579,10 @@ def presupuesto_pdf():
     # =========================
     # BRANDING
     # =========================
-    color_principal = HexColor("#0B3C5D")
-    color_secundario = HexColor("#328CC1")
+    color_principal = HexColor("#3C0606")
+    color_secundario = HexColor("#732323")
 
-    logo_path = os.path.join(BASE_DIR, "static", "img", "logo.png")
+    logo_path = os.path.join(BASE_DIR, "static", "img", "ong.png")
 
     if os.path.exists(logo_path):
         p.drawImage(

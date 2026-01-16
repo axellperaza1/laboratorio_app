@@ -651,7 +651,7 @@ def presupuesto_pdf():
     p.drawCentredString(
         width / 2,
         1.5*cm,
-        "Laboratorio Clínico ONG • Documento generado automáticamente"
+        "Laboratorio Clínico ONG. C.A. J-29703979-1 • Los precios están sujetos a la tasa cambiaria del Banco Central de Venezuela"
     )
 
     p.showPage()

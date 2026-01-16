@@ -57,11 +57,11 @@
             {% if session.get('personal_id') %}
             
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('logout') }}">Salir</a>
+              <a class="nav-link" href="{{ url_for('login_personal') }}">Salir</a>
             </li>
             {% else %}
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('login_personal') }}">salir</a>
+              <a class="nav-link" href="{{ url_for('logout') }}">salir</a>
             </li>
 
             
@@ -78,7 +78,7 @@
     <footer class="main-footer mt-5">
       <div class="container text-center">
         <p>
-          © 2026 Laboratorio Clínico ONG, C.A. J-29703979-1<br />Powered by Axell Peraza
+          © 2026 Laboratorio Clínico ONG, C.A. J-29703979-1<br /> Version 1.0.0.1 Powered by RoyalCode
         </p>
       </div>
     </footer>

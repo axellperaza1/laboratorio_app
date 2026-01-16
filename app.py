@@ -12,10 +12,11 @@ import base64
 from werkzeug.utils import secure_filename
 import os
 
-
-
-
-IS_PRODUCTION = os.getenv("ENV") == "production"
+def conectar():
+    database_url = os.getenv("DATABASE_URL")
+    if not database_url:
+        raise Exception("DATABASE_URL no encontrada")
+    return psycopg2.connect(database_url,sslmode="require")
 
 
 
@@ -32,14 +33,6 @@ def index():
 
 app.secret_key = "mi_clave_secreta"
 
-
-def conectar():
-    return psycopg2.connect(
-        dbname="laboratorio_clinico_ong",
-        user="postgres",
-        password="Aapf*18*",
-        host="localhost",
-    )
 
 
 # Este es el sistema de seguridad básico.

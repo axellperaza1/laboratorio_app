@@ -38,14 +38,6 @@ def conectar():
     if database_url:
         # PRODUCCIÓN (Railway)
         return psycopg2.connect(database_url)
-    else:
-        # LOCAL (tu laptop)
-        return psycopg2.connect(
-        dbname="laboratorio_clinico_ong",
-        user="postgres",
-        password="Aapf*18*",
-        host="localhost",
-    )
 
 # Este es el sistema de seguridad básico.
 def login_required(f):

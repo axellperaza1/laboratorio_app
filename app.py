@@ -14,7 +14,11 @@ import os
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm
+from reportlab.lib.colors import HexColor
+from reportlab.lib.utils import ImageReader
 
+BASE_DIR = os.path.dirname(os.path.adspath(__file__))
+logo_path = os.path.join(BASE_DIR,"static", "img", "ong.png")
 
 
 
@@ -531,8 +535,10 @@ def agregar_examen_db():
 
     return render_template("agregar_examen_db.html", mensaje=mensaje, examenes=examenes)
 
-@app.route("/presupuesto/pdf")
+
+@app.route("/presupuesto_pdf")
 def presupuesto_pdf():
+
     if "cliente_id" not in session:
         return redirect(url_for("login"))
 
@@ -541,13 +547,15 @@ def presupuesto_pdf():
     conexion = conectar()
     cursor = conexion.cursor(cursor_factory=DictCursor)
 
+    # DATOS DEL CLIENTE
     cursor.execute("""
-        SELECT nombre, cedula, email
+        SELECT nombre
         FROM clientes
         WHERE id = %s
     """, (cliente_id,))
     cliente = cursor.fetchone()
 
+    # EXÁMENES SELECCIONADOS
     cursor.execute("""
         SELECT e.nombre_examen, e.precio
         FROM examenes_deseados ed
@@ -556,66 +564,98 @@ def presupuesto_pdf():
     """, (cliente_id,))
     examenes = cursor.fetchall()
 
-    cursor.execute("""
-        SELECT COALESCE(SUM(e.precio), 0) AS total
-        FROM examenes_deseados ed
-        JOIN examenes e ON e.id = ed.examen_id
-        WHERE ed.cliente_id = %s
-    """, (cliente_id,))
-    total = cursor.fetchone()["total"]
+    total = sum([e["precio"] for e in examenes])
 
     cursor.close()
     conexion.close()
 
-    buffer = io.BytesIO()
-    p = canvas.Canvas(buffer, pagesize=A4)
+    # RESPUESTA PDF
+    response = make_response()
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = "inline; filename=presupuesto.pdf"
+
+    p = canvas.Canvas(response, pagesize=A4)
     width, height = A4
 
-    # Header
+    # =========================
+    # BRANDING
+    # =========================
+    color_principal = HexColor("#0B3C5D")
+    color_secundario = HexColor("#328CC1")
+
+    logo_path = os.path.join(BASE_DIR, "static", "img", "logo.png")
+
+    if os.path.exists(logo_path):
+        p.drawImage(
+            ImageReader(logo_path),
+            2*cm,
+            height - 3*cm,
+            width=4*cm,
+            preserveAspectRatio=True,
+            mask='auto'
+        )
+
     p.setFont("Helvetica-Bold", 16)
-    p.drawString(2*cm, height - 2*cm, "Laboratorio Clínico ONG")
+    p.setFillColor(color_principal)
+    p.drawString(7*cm, height - 2.2*cm, "Laboratorio Clínico ONG")
 
-    p.setFont("Helvetica", 11)
-    p.drawString(2*cm, height - 3*cm, "Presupuesto de Exámenes")
-
-    y = height - 5*cm
     p.setFont("Helvetica", 10)
-    p.drawString(2*cm, y, f"Paciente: {cliente['nombre']}")
-    y -= 0.6*cm
-    p.drawString(2*cm, y, f"Cédula: {cliente['cedula']}")
-    y -= 0.6*cm
-    p.drawString(2*cm, y, f"Correo: {cliente['email']}")
+    p.setFillColor(color_secundario)
+    p.drawString(7*cm, height - 3*cm, "Presupuesto de Exámenes Clínicos")
 
-    y -= 1.2*cm
+    p.setStrokeColor(color_principal)
+    p.setLineWidth(1)
+    p.line(2*cm, height - 3.6*cm, width - 2*cm, height - 3.6*cm)
+
+    # =========================
+    # INFO CLIENTE
+    # =========================
+    p.setFont("Helvetica", 10)
+    p.setFillColorRGB(0, 0, 0)
+
+    p.drawString(2*cm, height - 5*cm, f"Paciente: {cliente['nombre']}")
+    p.drawString(2*cm, height - 5.7*cm, f"Fecha: {datetime.now().strftime('%d/%m/%Y')}")
+    p.drawString(2*cm, height - 6.4*cm, "Presupuesto válido por 7 días")
+
+    # =========================
+    # TABLA EXÁMENES
+    # =========================
+    y = height - 8*cm
 
     p.setFont("Helvetica-Bold", 10)
     p.drawString(2*cm, y, "Examen")
-    p.drawString(14*cm, y, "Precio")
-    y -= 0.5*cm
-    p.line(2*cm, y, 19*cm, y)
-    y -= 0.5*cm
+    p.drawRightString(17*cm, y, "Precio")
+
+    y -= 0.4*cm
+    p.line(2*cm, y, width - 2*cm, y)
 
     p.setFont("Helvetica", 10)
+
     for e in examenes:
-        p.drawString(2*cm, y, e["nombre_examen"])
-        p.drawRightString(18*cm, y, f"${e['precio']}")
         y -= 0.7*cm
+        p.drawString(2*cm, y, e["nombre_examen"])
+        p.drawRightString(17*cm, y, f"${e['precio']}")
 
+    # =========================
+    # TOTAL
+    # =========================
     y -= 1*cm
-    p.setFont("Helvetica-Bold", 11)
-    p.drawRightString(18*cm, y, f"TOTAL: ${total}")
+    p.setFont("Helvetica-Bold", 12)
+    p.drawRightString(17*cm, y, f"TOTAL: ${total}")
 
-    p.setFont("Helvetica", 9)
-    p.drawString(2*cm, 2*cm, f"Fecha: {datetime.now().strftime('%d/%m/%Y')}")
+    # =========================
+    # FOOTER
+    # =========================
+    p.setFont("Helvetica", 8)
+    p.setFillColorRGB(0.4, 0.4, 0.4)
+    p.drawCentredString(
+        width / 2,
+        1.5*cm,
+        "Laboratorio Clínico ONG • Documento generado automáticamente"
+    )
 
     p.showPage()
     p.save()
-
-    buffer.seek(0)
-
-    response = make_response(buffer.read())
-    response.headers["Content-Type"] = "application/pdf"
-    response.headers["Content-Disposition"] = "inline; filename=presupuesto.pdf"
 
     return response
 

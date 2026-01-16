@@ -11,6 +11,8 @@ import io
 import base64
 from werkzeug.utils import secure_filename
 import os
+from weasyprint import HTML
+import tempfile
 
 
 
@@ -529,7 +531,27 @@ def agregar_examen_db():
 
     return render_template("agregar_examen_db.html", mensaje=mensaje, examenes=examenes)
 
+@app.route("/presupuesto-pdf")
+def presupuesto_pdf():
 
+    examenes = examenes_disponibles()  # tu función
+    total = sum(e["precio"] for e in examenes)
+
+    html = render_template(
+        "presupuesto_pdf.html",
+        paciente="Paciente de prueba",
+        fecha=datetime.now().strftime("%d/%m/%Y"),
+        examenes=examenes,
+        total=total
+    )
+
+    pdf = HTML(string=html).write_pdf()
+
+    response = make_response(pdf)
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = "inline; filename=presupuesto.pdf"
+
+    return response
 
 @app.route("/autolab")
 def autolab():

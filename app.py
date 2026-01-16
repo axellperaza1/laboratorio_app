@@ -4,7 +4,7 @@ from psycopg2.extras import DictCursor
 import psycopg2
 from functools import wraps
 from flask import session, redirect, url_for
-from flask import request, jsonify, make_response
+from flask import request, jsonify, make_response, Response
 from datetime import datetime
 import qrcode
 import io
@@ -13,9 +13,11 @@ from werkzeug.utils import secure_filename
 import os
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import LETTER
 from reportlab.lib.units import cm
 from reportlab.lib.colors import HexColor
 from reportlab.lib.utils import ImageReader
+from io import BytesIO
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 logo_path = os.path.join(BASE_DIR,"static", "img", "ong.png")
@@ -547,7 +549,6 @@ def presupuesto_pdf():
     conexion = conectar()
     cursor = conexion.cursor(cursor_factory=DictCursor)
 
-    # DATOS DEL CLIENTE
     cursor.execute("""
         SELECT nombre
         FROM clientes
@@ -555,7 +556,6 @@ def presupuesto_pdf():
     """, (cliente_id,))
     cliente = cursor.fetchone()
 
-    # EXÁMENES SELECCIONADOS
     cursor.execute("""
         SELECT e.nombre_examen, e.precio
         FROM examenes_deseados ed
@@ -564,17 +564,16 @@ def presupuesto_pdf():
     """, (cliente_id,))
     examenes = cursor.fetchall()
 
-    total = sum([e["precio"] for e in examenes])
+    total = sum(e["precio"] for e in examenes)
 
     cursor.close()
     conexion.close()
 
-    # RESPUESTA PDF
-    response = make_response()
-    response.headers["Content-Type"] = "application/pdf"
-    response.headers["Content-Disposition"] = "inline; filename=presupuesto.pdf"
-
-    p = canvas.Canvas(response, pagesize=A4)
+    # =========================
+    # PDF EN MEMORIA
+    # =========================
+    buffer = BytesIO()
+    p = canvas.Canvas(buffer, pagesize=A4)
     width, height = A4
 
     # =========================
@@ -592,7 +591,7 @@ def presupuesto_pdf():
             height - 3*cm,
             width=4*cm,
             preserveAspectRatio=True,
-            mask='auto'
+            mask="auto"
         )
 
     p.setFont("Helvetica-Bold", 16)
@@ -656,8 +655,15 @@ def presupuesto_pdf():
 
     p.showPage()
     p.save()
+    buffer.seek(0)
 
-    return response
+    return Response(
+        buffer,
+        mimetype="application/pdf",
+        headers={
+            "Content-Disposition": "inline; filename=presupuesto.pdf"
+        }
+    )
 
 
 @app.route("/autolab")

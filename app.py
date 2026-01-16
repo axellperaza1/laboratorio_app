@@ -17,7 +17,7 @@ from reportlab.lib.units import cm
 from reportlab.lib.colors import HexColor
 from reportlab.lib.utils import ImageReader
 
-BASE_DIR = os.path.dirname(os.path.adspath(__file__))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 logo_path = os.path.join(BASE_DIR,"static", "img", "ong.png")
 
 

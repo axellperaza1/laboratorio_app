@@ -11,7 +11,9 @@ import io
 import base64
 from werkzeug.utils import secure_filename
 import os
-
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.units import cm
 
 
 
@@ -529,6 +531,93 @@ def agregar_examen_db():
 
     return render_template("agregar_examen_db.html", mensaje=mensaje, examenes=examenes)
 
+@app.route("/presupuesto/pdf")
+def presupuesto_pdf():
+    if "cliente_id" not in session:
+        return redirect(url_for("login"))
+
+    cliente_id = session["cliente_id"]
+
+    conexion = conectar()
+    cursor = conexion.cursor(cursor_factory=DictCursor)
+
+    cursor.execute("""
+        SELECT nombre, cedula, email
+        FROM clientes
+        WHERE id = %s
+    """, (cliente_id,))
+    cliente = cursor.fetchone()
+
+    cursor.execute("""
+        SELECT e.nombre_examen, e.precio
+        FROM examenes_deseados ed
+        JOIN examenes e ON e.id = ed.examen_id
+        WHERE ed.cliente_id = %s
+    """, (cliente_id,))
+    examenes = cursor.fetchall()
+
+    cursor.execute("""
+        SELECT COALESCE(SUM(e.precio), 0) AS total
+        FROM examenes_deseados ed
+        JOIN examenes e ON e.id = ed.examen_id
+        WHERE ed.cliente_id = %s
+    """, (cliente_id,))
+    total = cursor.fetchone()["total"]
+
+    cursor.close()
+    conexion.close()
+
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer, pagesize=A4)
+    width, height = A4
+
+    # Header
+    p.setFont("Helvetica-Bold", 16)
+    p.drawString(2*cm, height - 2*cm, "Laboratorio Clínico ONG")
+
+    p.setFont("Helvetica", 11)
+    p.drawString(2*cm, height - 3*cm, "Presupuesto de Exámenes")
+
+    y = height - 5*cm
+    p.setFont("Helvetica", 10)
+    p.drawString(2*cm, y, f"Paciente: {cliente['nombre']}")
+    y -= 0.6*cm
+    p.drawString(2*cm, y, f"Cédula: {cliente['cedula']}")
+    y -= 0.6*cm
+    p.drawString(2*cm, y, f"Correo: {cliente['email']}")
+
+    y -= 1.2*cm
+
+    p.setFont("Helvetica-Bold", 10)
+    p.drawString(2*cm, y, "Examen")
+    p.drawString(14*cm, y, "Precio")
+    y -= 0.5*cm
+    p.line(2*cm, y, 19*cm, y)
+    y -= 0.5*cm
+
+    p.setFont("Helvetica", 10)
+    for e in examenes:
+        p.drawString(2*cm, y, e["nombre_examen"])
+        p.drawRightString(18*cm, y, f"${e['precio']}")
+        y -= 0.7*cm
+
+    y -= 1*cm
+    p.setFont("Helvetica-Bold", 11)
+    p.drawRightString(18*cm, y, f"TOTAL: ${total}")
+
+    p.setFont("Helvetica", 9)
+    p.drawString(2*cm, 2*cm, f"Fecha: {datetime.now().strftime('%d/%m/%Y')}")
+
+    p.showPage()
+    p.save()
+
+    buffer.seek(0)
+
+    response = make_response(buffer.read())
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = "inline; filename=presupuesto.pdf"
+
+    return response
 
 
 @app.route("/autolab")

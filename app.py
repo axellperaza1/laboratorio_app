@@ -29,11 +29,23 @@ def index():
 
 app.secret_key = "mi_clave_secreta"
 
+import os
+import psycopg2
+
 def conectar():
     database_url = os.getenv("DATABASE_URL")
-    if not database_url:
-        raise Exception("DATABASE_URL no encontrada")
-    return psycopg2.connect(database_url,sslmode="require")
+
+    if database_url:
+        # PRODUCCIÓN (Railway)
+        return psycopg2.connect(database_url)
+    else:
+        # LOCAL (tu laptop)
+        return psycopg2.connect(
+        dbname="laboratorio_clinico_ong",
+        user="postgres",
+        password="Aapf*18*",
+        host="localhost",
+    )
 
 # Este es el sistema de seguridad básico.
 def login_required(f):

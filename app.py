@@ -20,7 +20,6 @@ from reportlab.lib.utils import ImageReader
 from io import BytesIO
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-logo_path = os.path.join(BASE_DIR,"static", "img", "ong.png")
 
 
 
@@ -581,6 +580,8 @@ def presupuesto_pdf():
     # =========================
     color_principal = HexColor("#3C0606")
     color_secundario = HexColor("#732323")
+
+    from reportlab.lib.utils import ImageReader
 
     logo_path = os.path.join(BASE_DIR, "static", "img", "ong.png")
 

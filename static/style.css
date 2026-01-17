@@ -1395,7 +1395,7 @@ body {
     background: linear-gradient(120deg,
     rgba(57, 8, 8, 0.867), 
     rgba(22, 1, 1, 0.415)),
-    url("/static/img/hero-lab.webp}") 
+    url("/static/img/hero-lab.webp") 
     center/cover no-repeat;
     overflow: hidden;
 }

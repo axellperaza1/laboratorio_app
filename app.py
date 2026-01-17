@@ -45,6 +45,8 @@ app.config["MAIL_DEFAULT_SERNDER"] = "Laboratorio Clínico ONG"
 
 mail = Mail(app)
 
+app.secret_key = os.environ("SECRET_KEY", "clave-local-segura")
+
 serializer = URLSafeTimedSerializer(app.secret_key)
 
 def generar_token(email):
@@ -65,7 +67,7 @@ def index():
     return render_template("index.html")
 
 
-app.secret_key = os.environ("SECRET_KEY", "clave-local-segura")
+
 
 import os
 import psycopg2

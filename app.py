@@ -677,7 +677,7 @@ def presupuesto_pdf():
     p.setLineWidth(0.5)
     p.line(2*cm, 2.8*cm, width - 2*cm, 2.8*cm)
 
-    # Texto legal
+    # Texto legalorci
     p.setFont("Helvetica", 8)
     p.setFillColorRGB(0.3, 0.3, 0.3)
     p.drawCentredString(
@@ -712,7 +712,7 @@ def presupuesto_pdf():
         buffer,
     mimetype="application/pdf",
     headers={"Content-Disposition": "inline; filename=presupuesto_examenes.pdf"},
-)
+    )
 
 
 @app.route("/autolab")

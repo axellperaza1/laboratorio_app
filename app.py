@@ -65,7 +65,7 @@ def index():
     return render_template("index.html")
 
 
-app.secret_key = "mi_clave_secreta"
+app.secret_key = os.environ("SECRET_KEY", "clave-local-segura")
 
 import os
 import psycopg2

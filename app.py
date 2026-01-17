@@ -669,6 +669,30 @@ def presupuesto_pdf():
     p.drawRightString(17 * cm, y, f"TOTAL A PAGAR: ${total:.2f}")
 
     # =========================
+    # NOTA LEGAL
+    # =========================
+
+    # Línea separadora
+    p.setStrokeColor(color_principal)
+    p.setLineWidth(0.5)
+    p.line(2*cm, 2.8*cm, width - 2*cm, 2.8*cm)
+
+    # Texto legal
+    p.setFont("Helvetica", 8)
+    p.setFillColorRGB(0.3, 0.3, 0.3)
+    p.drawCentredString(
+        width / 2,
+        2.1*cm,
+        "Para que este documento sea válido, debe presentarse al laboratorio para su firma y sello."
+    )
+
+    p.drawCentredString(
+        width / 2,
+        1.7*cm,
+        "De lo contrario, no será validado."
+    )
+
+    # =========================
     # PIE DE PÁGINA
     # =========================
     p.setFont("Helvetica", 8)

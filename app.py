@@ -19,6 +19,7 @@ from reportlab.lib.colors import HexColor
 from reportlab.lib.utils import ImageReader
 from io import BytesIO
 from whitenoise import WhiteNoise
+from reportlab.lib.colors import Color
 
 
 app = Flask(__name__)
@@ -608,6 +609,25 @@ def presupuesto_pdf():
 
     # =========================
 
+
+    p.saveState()
+    p.setFillAlpha(0.15)  # transparencia
+
+    logo_path = "static/img/logo.png"  # AJUSTA LA RUTA
+
+    logo_width = 12 * cm
+    logo_height = 12 * cm
+
+    p.drawImage(
+        logo_path,
+        (width - logo_width) / 2,
+        (height - logo_height) / 2,
+        width=logo_width,
+        height=logo_height,
+        mask="auto"
+    )
+
+    p.restoreState()
 
 # ENCABEZADO
 # =========================

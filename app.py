@@ -20,13 +20,12 @@ from reportlab.lib.utils import ImageReader
 from io import BytesIO
 from whitenoise import WhiteNoise
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-
 
 
 
 app = Flask(__name__)
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app.wsgi_app = WhiteNoise(
     app.wsgi_app, root=os.path.join(BASE_DIR, "static"), prefix="static/"

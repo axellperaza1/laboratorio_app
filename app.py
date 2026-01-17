@@ -675,7 +675,7 @@ def presupuesto_pdf():
     # Línea separadora
     p.setStrokeColor(color_principal)
     p.setLineWidth(0.5)
-    p.line(2*cm, 2.8*cm, width - 2*cm, 2.8*cm)
+    p.line(2*cm, 4.8*cm, width - 2*cm, 4.8*cm)
 
     # Texto legalorci
     p.setFont("Helvetica", 8)

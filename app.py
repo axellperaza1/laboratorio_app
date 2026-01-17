@@ -611,18 +611,18 @@ def presupuesto_pdf():
 
 # ENCABEZADO
 # =========================
-    text_x = 6 *cm
+    text_x = 6*cm
     p.setFont("Helvetica-Bold", 16)
     p.setFillColor(color_principal)
-    p.drawString(2 * cm, height - 2.2 * cm, "LABORATORIO CLÍNICO ONG, C.A.")
+    p.drawString(text_x, height - 2.2 * cm, "LABORATORIO CLÍNICO ONG, C.A.")
 
     p.setFont("Helvetica", 9)
     p.setFillColor(color_secundario)
-    p.drawString(2 * cm, height - 2.9 * cm, "RIF: J-29703979-1")
+    p.drawString(text_x, height - 2.9 * cm, "RIF: J-29703979-1")
 
     p.setFont("Helvetica-Bold", 11)
     p.setFillColor(color_secundario)
-    p.drawString(2 * cm, height - 3.7 * cm, "Presupuesto de Exámenes Clínicos")
+    p.drawString(text_x, height - 3.7 * cm, "Presupuesto de Exámenes Clínicos")
 
     p.setStrokeColor(color_principal)
     p.setLineWidth(1)
@@ -676,7 +676,8 @@ def presupuesto_pdf():
     p.drawCentredString(
         width / 2,
         1.5 * cm,
-        "Laboratorio Clínico ONG, C.A. • Documento generado automáticamente • No válido como factura",
+        "Los precios están sujetos a la tasa cambiaria del Banco Central De Venezuela"
+        "Laboratorio Clínico ONG, C.A. • J-29703979-1 ",
     )
 
     p.showPage()

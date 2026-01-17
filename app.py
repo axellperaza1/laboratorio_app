@@ -682,13 +682,13 @@ def presupuesto_pdf():
     p.setFillColorRGB(0.4, 0.4, 0.4)
     p.drawCentredString(
         width / 2,
-        2.1*cm,
+        4.1*cm,
         "Para que este documento sea válido, debe presentarse al laboratorio para su firma y sello."
     )
 
     p.drawCentredString(
         width / 2,
-        1.7*cm,
+        3.7*cm,
         "De lo contrario, no será validado."
     )
 

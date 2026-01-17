@@ -583,17 +583,20 @@ def presupuesto_pdf():
 
     from reportlab.lib.utils import ImageReader
 
-    logo_path = os.path.join(BASE_DIR, "static", "img", "ong.png")
+    logo_path = os.path.join(BASE_DIR, "static", "img", "logo.png")
 
-    if os.path.exists(logo_path):
+if os.path.exists(logo_path):
+    try:
         p.drawImage(
             ImageReader(logo_path),
             2*cm,
             height - 3*cm,
             width=4*cm,
             preserveAspectRatio=True,
-            mask="auto"
+            mask='auto'
         )
+    except Exception as e:
+        print("Error cargando logo:", e)
 
     p.setFont("Helvetica-Bold", 16)
     p.setFillColor(color_principal)

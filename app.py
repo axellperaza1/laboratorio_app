@@ -679,7 +679,7 @@ def presupuesto_pdf():
 
     # Texto legalorci
     p.setFont("Helvetica", 8)
-    p.setFillColorRGB(color_principal)
+    p.setFillColorRGB(0.4, 0.4, 0.4)
     p.drawCentredString(
         width / 2,
         2.1*cm,
@@ -701,7 +701,15 @@ def presupuesto_pdf():
         width / 2,
         1.5 * cm,
         "Los precios están sujetos a la tasa cambiaria del Banco Central De Venezuela",
-        "Laboratorio Clínico ONG, C.A. • J-29703979-1 ",
+        
+    )
+
+    p.setFont("Helvetica", 8)
+    p.setFillColorRGB(0.4, 0.4, 0.4)
+    p.drawCentredString(
+        width / 2,
+        1.1 * cm,
+        "Laboratorio Clínico ONG, C.A. • J-29703979-1 "
     )
 
     p.showPage()
@@ -712,7 +720,7 @@ def presupuesto_pdf():
         buffer,
     mimetype="application/pdf",
     headers={"Content-Disposition": "inline; filename=presupuesto_examenes.pdf"},
-    )
+)
 
 
 @app.route("/autolab")

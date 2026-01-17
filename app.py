@@ -45,7 +45,7 @@ app.config["MAIL_DEFAULT_SERNDER"] = "Laboratorio Clínico ONG"
 
 mail = Mail(app)
 
-app.secret_key = os.environ("SECRET_KEY", "clave-local-segura")
+app.secret_key = os.environ.get("SECRET_KEY", "clave-local-segura")
 
 serializer = URLSafeTimedSerializer(app.secret_key)
 

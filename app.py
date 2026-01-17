@@ -787,7 +787,7 @@ def aliados():
     return render_template("aliados.html")
 
 @app.route("/forgot-password", methods=["GET", "POST"])
-def recuperar_password():
+def forgot_password():
     if request.method == "POST":
         email = request.form["email"]
 
@@ -823,7 +823,7 @@ def recuperar_password():
             mensaje="Te enviamos un enlace para recuperar tu contraseña"
         )
 
-    return render_template("recuperar_password.html")
+    return render_template("forgot_password.html")
 
 
 @app.route("/reset-password/<token>", methods=["GET", "POST"])

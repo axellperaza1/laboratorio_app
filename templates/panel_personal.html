@@ -3,27 +3,38 @@
 {% block title %}Panel de Personal{% endblock %}
 
 {% block contenido %}
-<h3>Subir resultados de exámenes</h3>
+<div class="panel-card">
+  <h3 class="panel-title">Subir resultados de exámenes</h3>
 
-<form method="POST" enctype="multipart/form-data">
+  <form method="POST" enctype="multipart/form-data" class="panel-form">
 
-  <label>Cliente</label>
-  <select name="cliente_id" required>
-    {% for c in clientes %}
-      <option value="{{ c.id }}">{{ c.nombre }}</option>
-    {% endfor %}
-  </select>
+    <div class="form-group">
+      <label>Cliente</label>
+      <select name="cliente_id" required>
+        {% for c in clientes %}
+          <option value="{{ c.id }}">{{ c.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
 
-  <label>Examen</label>
-  <select name="examen_id" required>
-    {% for e in examenes %}
-      <option value="{{ e.id }}">{{ e.nombre_examen }}</option>
-    {% endfor %}
-  </select>
+    <div class="form-group">
+      <label>Examen</label>
+      <select name="examen_id" required>
+        {% for e in examenes %}
+          <option value="{{ e.id }}">{{ e.nombre_examen }}</option>
+        {% endfor %}
+      </select>
+    </div>
 
-  <label>Resultado (PDF)</label>
-  <input type="file" name="resultado_pdf" accept="application/pdf" required>
+    <div class="form-group">
+      <label>Resultado (PDF)</label>
+      <input type="file" name="resultado_pdf" accept="application/pdf" required>
+    </div>
 
-  <button type="submit">Guardar resultado</button>
-</form>
+    <button type="submit" class="btn-primary">
+      Guardar resultado
+    </button>
+
+  </form>
+</div>
 {% endblock %}

@@ -21,8 +21,6 @@ from io import BytesIO
 from whitenoise import WhiteNoise
 
 
-
-
 app = Flask(__name__)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -30,6 +28,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 app.wsgi_app = WhiteNoise(
     app.wsgi_app, root=os.path.join(BASE_DIR, "static"), prefix="static/"
 )
+
 
 # Página principal
 @app.route("/")
@@ -42,12 +41,14 @@ app.secret_key = "mi_clave_secreta"
 import os
 import psycopg2
 
+
 def conectar():
     database_url = os.getenv("DATABASE_URL")
 
     if database_url:
         # PRODUCCIÓN (Railway)
         return psycopg2.connect(database_url)
+
 
 # Este es el sistema de seguridad básico.
 def login_required(f):
@@ -297,26 +298,28 @@ def login_personal():
 
 
 # panel de trabajo del personal
-@app.route("/panel_personal", methods=['GET', 'POST'])
+@app.route("/panel_personal", methods=["GET", "POST"])
 def panel_personal():
 
     conexion = conectar()
     cursor = conexion.cursor(cursor_factory=DictCursor)
-    
-    if request.method == 'POST':
-        cliente_id = request.form['cliente_id']
-        examen_id = request.form['examen_id']
-        pdf = request.files['resultado_pdf']
+
+    if request.method == "POST":
+        cliente_id = request.form["cliente_id"]
+        examen_id = request.form["examen_id"]
+        pdf = request.files["resultado_pdf"]
 
         filename = secure_filename(pdf.filename)
-        ruta = f'static/resultados/pdfs/{filename}'
+        ruta = f"static/resultados/pdfs/{filename}"
         pdf.save(ruta)
 
-    
-        cursor.execute("""
+        cursor.execute(
+            """
             INSERT INTO resultados (cliente_id, examen_id, archivo_pdf)
             VALUES (%s, %s, %s)
-        """, (cliente_id, examen_id, ruta))
+        """,
+            (cliente_id, examen_id, ruta),
+        )
 
         conexion.commit()
 
@@ -329,11 +332,7 @@ def panel_personal():
     cursor.close()
     conexion.close()
 
-    return render_template(
-        'panel_personal.html',
-        clientes=clientes,
-        examenes=examenes
-    )
+    return render_template("panel_personal.html", clientes=clientes, examenes=examenes)
 
 
 # funcion logout para todos
@@ -455,7 +454,8 @@ def dashboard():
 
     total = cursor.fetchone()["total"]
 
-    cursor.execute("""
+    cursor.execute(
+        """
         SELECT 
             r.archivo_pdf,
             r.fecha,
@@ -463,10 +463,10 @@ def dashboard():
         FROM resultados r
         JOIN examenes e ON e.id = r.examen_id
         WHERE r.cliente_id = %s
-    """, (session['cliente_id'],))
+    """,
+        (session["cliente_id"],),
+    )
     realizados = cursor.fetchall()
-    
-    
 
     cursor.close()
     conexion.close()
@@ -551,19 +551,25 @@ def presupuesto_pdf():
     conexion = conectar()
     cursor = conexion.cursor(cursor_factory=DictCursor)
 
-    cursor.execute("""
+    cursor.execute(
+        """
         SELECT nombre
         FROM clientes
         WHERE id = %s
-    """, (cliente_id,))
+    """,
+        (cliente_id,),
+    )
     cliente = cursor.fetchone()
 
-    cursor.execute("""
+    cursor.execute(
+        """
         SELECT e.nombre_examen, e.precio
         FROM examenes_deseados ed
         JOIN examenes e ON e.id = ed.examen_id
         WHERE ed.cliente_id = %s
-    """, (cliente_id,))
+    """,
+        (cliente_id,),
+    )
     examenes = cursor.fetchall()
 
     cursor.close()
@@ -584,78 +590,91 @@ def presupuesto_pdf():
     color_principal = HexColor("#3C0606")
     color_secundario = HexColor("#732323")
 
-    logo_path = os.path.join(BASE_DIR, "static", "img", "logo.png")
+    logo_path = os.path.join(BASE_DIR, "static", "img", "ong.png")
 
     if os.path.exists(logo_path):
         try:
             p.drawImage(
                 ImageReader(logo_path),
-                2*cm,
-                height - 3*cm,
-                width=4*cm,
+                2 * cm,
+                height - 3 * cm,
+                width=4 * cm,
                 preserveAspectRatio=True,
-                mask='auto'
+                mask="auto",
             )
         except Exception as e:
             print("Error cargando logo:", e)
 
+    # =========================
+
+
+# ENCABEZADO
+# =========================
     p.setFont("Helvetica-Bold", 16)
     p.setFillColor(color_principal)
-    p.drawString(7*cm, height - 2.2*cm, "Laboratorio Clínico ONG")
+    p.drawString(2 * cm, height - 2.2 * cm, "LABORATORIO CLÍNICO ONG, C.A.")
 
-    p.setFont("Helvetica", 10)
+    p.setFont("Helvetica", 9)
     p.setFillColor(color_secundario)
-    p.drawString(7*cm, height - 3*cm, "Presupuesto de Exámenes Clínicos")
+    p.drawString(2 * cm, height - 2.9 * cm, "RIF: J-29703979-1")
+
+    p.setFont("Helvetica-Bold", 11)
+    p.setFillColor(color_secundario)
+    p.drawString(2 * cm, height - 3.7 * cm, "Presupuesto de Exámenes Clínicos")
 
     p.setStrokeColor(color_principal)
     p.setLineWidth(1)
-    p.line(2*cm, height - 3.6*cm, width - 2*cm, height - 3.6*cm)
+    p.line(2 * cm, height - 4.2 * cm, width - 2 * cm, height - 4.2 * cm)
 
     # =========================
-    # INFO CLIENTE
+    # INFORMACIÓN DEL PACIENTE
     # =========================
     p.setFont("Helvetica", 10)
     p.setFillColorRGB(0, 0, 0)
 
-    p.drawString(2*cm, height - 5*cm, f"Paciente: {cliente['nombre']}")
-    p.drawString(2*cm, height - 5.7*cm, f"Fecha: {datetime.now().strftime('%d/%m/%Y')}")
-    p.drawString(2*cm, height - 6.4*cm, "Presupuesto válido por 7 días")
+    p.drawString(2 * cm, height - 5.3 * cm, f"Paciente: {cliente['nombre']}")
+    p.drawString(
+        2 * cm,
+        height - 6.0 * cm,
+        f"Fecha de emisión: {datetime.now().strftime('%d/%m/%Y')}",
+    )
+    p.drawString(2 * cm, height - 6.7 * cm, "Validez del presupuesto: 7 días")
 
     # =========================
-    # TABLA EXÁMENES
+    # TABLA DE EXÁMENES
     # =========================
-    y = height - 8*cm
+    y = height - 8.3 * cm
 
     p.setFont("Helvetica-Bold", 10)
-    p.drawString(2*cm, y, "Examen")
-    p.drawRightString(17*cm, y, "Precio")
+    p.drawString(2 * cm, y, "Examen solicitado")
+    p.drawRightString(17 * cm, y, "Precio")
 
-    y -= 0.4*cm
-    p.line(2*cm, y, width - 2*cm, y)
+    y -= 0.3 * cm
+    p.line(2 * cm, y, width - 2 * cm, y)
 
     p.setFont("Helvetica", 10)
 
     for e in examenes:
-        y -= 0.7*cm
-        p.drawString(2*cm, y, e["nombre_examen"])
-        p.drawRightString(17*cm, y, f"${e['precio']}")
+        y -= 0.7 * cm
+        p.drawString(2 * cm, y, e["nombre_examen"])
+        p.drawRightString(17 * cm, y, f"${e['precio']:.2f}")
 
     # =========================
     # TOTAL
     # =========================
-    y -= 1*cm
+    y -= 1 * cm
     p.setFont("Helvetica-Bold", 12)
-    p.drawRightString(17*cm, y, f"TOTAL: ${total}")
+    p.drawRightString(17 * cm, y, f"TOTAL A PAGAR: ${total:.2f}")
 
     # =========================
-    # FOOTER
+    # PIE DE PÁGINA
     # =========================
     p.setFont("Helvetica", 8)
     p.setFillColorRGB(0.4, 0.4, 0.4)
     p.drawCentredString(
         width / 2,
-        1.5*cm,
-        "Laboratorio Clínico ONG • Documento generado automáticamente"
+        1.5 * cm,
+        "Laboratorio Clínico ONG, C.A. • Documento generado automáticamente • No válido como factura",
     )
 
     p.showPage()
@@ -664,18 +683,20 @@ def presupuesto_pdf():
 
     return Response(
         buffer,
-        mimetype="application/pdf",
-        headers={"Content-Disposition": "inline; filename=presupuesto.pdf"}
-    )
+    mimetype="application/pdf",
+    headers={"Content-Disposition": "inline; filename=presupuesto_examenes.pdf"},
+)
 
 
 @app.route("/autolab")
 def autolab():
     return render_template("autolab.html")
 
+
 @app.route("/aliados")
 def aliados():
     return render_template("aliados.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)

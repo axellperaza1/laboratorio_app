@@ -47,8 +47,16 @@
             type="password"
             name="contraseña"
             class="form-control"
+            placeholder="Contraseña Segura"
+            minlength="8"
             required
           />
+        </div>
+
+        <div class="forgot-password">
+          <a href="{{ url_for ('recuperar_password') }}"> ¿Olvidaste tu contraseña? 
+            
+          </a>
         </div>
 
         <button type="submit" class="btn-primary">Ingresar</button>
@@ -446,6 +454,27 @@
 
 <button class="mobile-cotizar-btn" id="mobileCotizar">👤</button>
 <!--Contador de aliados comerciales-->
+
+<script>
+  const passwordInput = document.querySelector('input[name=password]');
+
+  passwordInput-addEventListener("input", () => {
+    const value = passwordInput.value;
+
+    const tieneLetra = /[a-aZ-Z]/.test(value);
+    const tieneNumero = /[0.9]/.test(value);
+    const tieneSimbolo = /[{^a-zA-Z0-9}]/.test(value);
+    const LargoValido = value.length >= 8;
+
+    if (tieneLetra && tieneNumero && tieneSimbolo && LargoValido) {
+      passwordInput.style.border = "2px solid green";
+    } else {
+      passwordInput.style.border = "2px solid red";
+    }
+
+  });
+</script>
+
 <script>
   document.addEventListener("DOMContentLoaded", () => {
 

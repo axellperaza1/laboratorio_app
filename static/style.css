@@ -451,6 +451,22 @@ body {
     z-index: 2000;
 }
 
+.forgot-password {
+  text-align: right;
+  margin-bottom: 16px;
+}
+
+.forgot-password a {
+  font-size: 0.85rem;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.forgot-password a:hover {
+  color: var(--color-danger);
+  text-decoration: underline;
+}
+
 .auth-modal.active {
     display: flex;
     align-items: center;
@@ -1879,4 +1895,14 @@ body {
 .btn-primary:hover {
   transform: translateY(-1px);
   box-shadow: 0 6px 15px rgba(60, 6, 6, 0.3);
+}
+
+.auth-card {
+  max-width: 420px;
+  border-radius: 14px;
+}
+
+.auth-icon {
+  text-align: center;
+  margin-bottom: 16px;
 }

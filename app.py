@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from db import conectar
+import re
 from psycopg2.extras import DictCursor
 import psycopg2
 from functools import wraps
 from flask import session, redirect, url_for
 from flask import request, jsonify, make_response, Response
-from datetime import datetime
+from datetime import datetime, timedelta
 import qrcode
 import io
 import base64
@@ -20,6 +21,11 @@ from reportlab.lib.utils import ImageReader
 from io import BytesIO
 from whitenoise import WhiteNoise
 from reportlab.lib.colors import Color
+from flask_mail import Mail, Message
+from itsdangerous import URLSafeTimedSerializer
+from werkzeug.security import generate_password_hash
+import secrets
+
 
 
 app = Flask(__name__)
@@ -30,6 +36,28 @@ app.wsgi_app = WhiteNoise(
     app.wsgi_app, root=os.path.join(BASE_DIR, "static"), prefix="static/"
 )
 
+app.config["MAIL_SERVER"] = "smtp.gmail.com"
+app.config["MAIL_PORT"] = "587"
+app.config["MAIL_USE_TLS"] = True
+app.config["MAIL_USERNAME"] = "tucorreo@gmail.com"
+app.config["MAIL_PASSWORD"] = "CLAVE_DE_APP"
+app.config["MAIL_DEFAULT_SERNDER"] = "Laboratorio Clínico ONG"
+
+mail = Mail(app)
+
+serializer = URLSafeTimedSerializer(app.secret_key)
+
+def generar_token(email):
+    return serializer.dumps(email,salt="recuperar-password")
+
+def validad_token(token, tiempo=3600):
+    try:
+        email = serializer.loads(
+            token, salt="recuperar-password", max_age=tiempo
+        )
+        return email
+    except:
+        return None
 
 # Página principal
 @app.route("/")
@@ -236,6 +264,9 @@ def registro():
         telefono = request.form["telefono"]
         contraseña = request.form["contraseña"]
 
+        if not contraseña_valida(contraseña):
+            error = "La contraseña debe tener al menos 8 caracteres, letras, números y símbolos."
+
         # Guardar en la base de datos (no olvides validar)
         conexion = conectar()
         cursor = conexion.cursor()
@@ -249,7 +280,8 @@ def registro():
 
         return redirect(url_for("login"))  # Redirigir al login después de registrar
 
-    return render_template("registro.html")
+    return render_template("registro.html",
+                           error=error)
 
 
 # consulta de examenes disponibles
@@ -752,6 +784,108 @@ def autolab():
 def aliados():
     return render_template("aliados.html")
 
+@app.route("/forgot-password", methods=["GET", "POST"])
+def forgot_password():
+    if request.method == "POST":
+        email = request.form["email"]
+
+        conn = conectar()
+        cur = conn.cursor()
+
+        cur.execute("SELECT email FROM clientes WHERE email = %s", (email,))
+        cliente = cur.fetchone()
+
+        if not cliente:
+            return render_template(
+                "forgot_password.html",
+                error="Este correo no está registrado"
+            )
+
+        token = secrets.token_urlsafe(32)
+        expires = datetime.now() + timedelta(hours=1)
+
+        cur.execute(
+            "INSERT INTO password_reset (email, token, expires_at) VALUES (%s, %s, %s)",
+            (email, token, expires)
+        )
+
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        # aquí luego conectamos el envío de correo
+        print(f"LINK: https://tudominio.com/reset-password/{token}")
+
+        return render_template(
+            "forgot_password.html",
+            mensaje="Te enviamos un enlace para recuperar tu contraseña"
+        )
+
+    return render_template("recuperar_password.html")
+
+
+@app.route("/reset-password/<token>", methods=["GET", "POST"])
+def reset_password(token):
+    conn = conectar()
+    cur = conn.cursor()
+
+    cur.execute(
+        "SELECT email FROM password_reset WHERE token = %s AND expires_at > NOW()",
+        (token,)
+    )
+    data = cur.fetchone()
+
+    if not data:
+        cur.close()
+        conn.close()
+        return "Enlace inválido o vencido 😢"
+
+    email = data[0]
+
+    if request.method == "POST":
+        nueva_password = request.form["password"]
+
+        if not contraseña_valida(nueva_password):
+            return render_template(
+                "reset_password.html",
+                token=token,
+                error="La contraseña no cumple los requisitos"
+            )
+
+        hash_password = generate_password_hash(nueva_password)
+
+        cur.execute(
+            "UPDATE clientes SET contraseña = %s WHERE email = %s",
+            (hash_password, email)
+        )
+
+        cur.execute(
+            "DELETE FROM password_reset WHERE email = %s",
+            (email,)
+        )
+
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        return redirect(url_for("login"))
+
+    cur.close()
+    conn.close()
+    return render_template("reset_password.html", token=token)
+                                
+    
+
+def contraseña_valida(password):
+    if len(password) < 8:
+        return False
+    if not re.search(r"[A-Za-z]", password):
+        return False
+    if not re.search(r"[0-9]", password):
+        return False
+    if not re.search(r"[^A-Za-z0-9]", password):
+        return False
+    return True
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -590,26 +590,28 @@ def presupuesto_pdf():
     color_principal = HexColor("#3C0606")
     color_secundario = HexColor("#732323")
 
-    logo_path = os.path.join(BASE_DIR, "static", "img", "ong.png")
+    logo_path = "static/img/ong.png"
+    logo = ImageReader (logo_path)
 
-    if os.path.exists(logo_path):
-        try:
-            p.drawImage(
-                ImageReader(logo_path),
+    
+    
+    p.drawImage(
+                logo,
                 2 * cm,
-                height - 3 * cm,
-                width=4 * cm,
+                height - 4 * cm,
+                width=3 * cm,
+                height=3 * cm,
                 preserveAspectRatio=True,
                 mask="auto",
             )
-        except Exception as e:
-            print("Error cargando logo:", e)
+       
 
     # =========================
 
 
 # ENCABEZADO
 # =========================
+    text_x = 6 *cm
     p.setFont("Helvetica-Bold", 16)
     p.setFillColor(color_principal)
     p.drawString(2 * cm, height - 2.2 * cm, "LABORATORIO CLÍNICO ONG, C.A.")

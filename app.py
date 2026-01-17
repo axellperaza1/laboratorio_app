@@ -676,7 +676,7 @@ def presupuesto_pdf():
     p.drawCentredString(
         width / 2,
         1.5 * cm,
-        "Los precios están sujetos a la tasa cambiaria del Banco Central De Venezuela"
+        "Los precios están sujetos a la tasa cambiaria del Banco Central De Venezuela",
         "Laboratorio Clínico ONG, C.A. • J-29703979-1 ",
     )
 

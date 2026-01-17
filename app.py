@@ -18,6 +18,7 @@ from reportlab.lib.units import cm
 from reportlab.lib.colors import HexColor
 from reportlab.lib.utils import ImageReader
 from io import BytesIO
+from whitenoise import WhiteNoise
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -27,6 +28,9 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 
+app.wsgi_app = WhiteNoise(
+    app.wsgi_app, root=os.path.join(BASE_DIR, "static"), prefix="static/"
+)
 
 # Página principal
 @app.route("/")
@@ -563,10 +567,10 @@ def presupuesto_pdf():
     """, (cliente_id,))
     examenes = cursor.fetchall()
 
-    total = sum(e["precio"] for e in examenes)
-
     cursor.close()
     conexion.close()
+
+    total = sum(e["precio"] for e in examenes)
 
     # =========================
     # PDF EN MEMORIA
@@ -581,22 +585,20 @@ def presupuesto_pdf():
     color_principal = HexColor("#3C0606")
     color_secundario = HexColor("#732323")
 
-    from reportlab.lib.utils import ImageReader
-
     logo_path = os.path.join(BASE_DIR, "static", "img", "logo.png")
 
-if os.path.exists(logo_path):
-    try:
-        p.drawImage(
-            ImageReader(logo_path),
-            2*cm,
-            height - 3*cm,
-            width=4*cm,
-            preserveAspectRatio=True,
-            mask='auto'
-        )
-    except Exception as e:
-        print("Error cargando logo:", e)
+    if os.path.exists(logo_path):
+        try:
+            p.drawImage(
+                ImageReader(logo_path),
+                2*cm,
+                height - 3*cm,
+                width=4*cm,
+                preserveAspectRatio=True,
+                mask='auto'
+            )
+        except Exception as e:
+            print("Error cargando logo:", e)
 
     p.setFont("Helvetica-Bold", 16)
     p.setFillColor(color_principal)
@@ -654,7 +656,7 @@ if os.path.exists(logo_path):
     p.drawCentredString(
         width / 2,
         1.5*cm,
-        "Laboratorio Clínico ONG. C.A. J-29703979-1 • Los precios están sujetos a la tasa cambiaria del Banco Central de Venezuela"
+        "Laboratorio Clínico ONG • Documento generado automáticamente"
     )
 
     p.showPage()
@@ -664,9 +666,7 @@ if os.path.exists(logo_path):
     return Response(
         buffer,
         mimetype="application/pdf",
-        headers={
-            "Content-Disposition": "inline; filename=presupuesto.pdf"
-        }
+        headers={"Content-Disposition": "inline; filename=presupuesto.pdf"}
     )
 
 

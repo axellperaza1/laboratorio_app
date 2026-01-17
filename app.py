@@ -874,7 +874,7 @@ def reset_password(token):
 
     cur.close()
     conn.close()
-    return render_template("reset_password.html", token=token)
+    return render_template("recuperar_password.html", token=token)
                                 
     
 

@@ -679,7 +679,7 @@ def presupuesto_pdf():
 
     # Texto legalorci
     p.setFont("Helvetica", 8)
-    p.setFillColorRGB(0.3, 0.3, 0.3)
+    p.setFillColorRGB(color_principal)
     p.drawCentredString(
         width / 2,
         2.1*cm,

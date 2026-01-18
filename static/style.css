@@ -1878,7 +1878,7 @@ body {
 .horarios-lab {
   width: 100%;
   padding: 60px 20px;
-  background-color: rgba(223, 124, 124, 0.531);
+  background-color: rgba(77, 9, 9, 0.531);
 }
 .container-horario {
   max-width: 900px;
@@ -1888,17 +1888,17 @@ body {
 .horario-text {
   font-size: 50px;
   font-weight: bold;
-  color: #000000;
+  color: #ffffff;
   margin-bottom: 15px;
 }
 .horarios-lab h2 {
   font-weight: bold;
-  color: #000000;
+  color: #ffffff;
 }
 
 .horario-text-dia {
   font-size: 1.2rem;
-  color: #555;
+  color: #eec1c1;
   margin-bottom: 5px;
 }
 

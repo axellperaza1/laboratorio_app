@@ -38,12 +38,13 @@ body {
     padding: 12px 30px;
     background: transparent;
     backdrop-filter: blur(60px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.015);
     backdrop-filter: blur(60px);
 }
 .header.scrolled {
-    background: rgba(255, 255, 255, 0.97);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.646);
+    backdrop-filter: blur(60px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.146);
 
 }
 
@@ -1521,7 +1522,7 @@ body {
 }
 
 .trust-title {
-    font-size: 2.6rem;
+    font-size: 80px;
     margin-bottom: 20px;
     flex: 1;
 }

@@ -1886,7 +1886,7 @@ body {
   text-align: center;
 }
 .horario-text {
-  font-size: 70px;
+  font-size: 50px;
   font-weight: bold;
   color: #000000;
   margin-bottom: 15px;
@@ -1903,7 +1903,7 @@ body {
 }
 
 .hora-text {
-  font-size: 35px;
+  font-size: 30px;
   font-weight:  bold;
   color: var(--color-text);
 
@@ -1919,7 +1919,7 @@ body {
   color: #311618;
 }
 .horario-image img {
-    width: 200px;
-    height: 200px;
+    width: 350px;
+    height: 350px;
     
 }

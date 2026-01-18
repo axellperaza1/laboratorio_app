@@ -36,15 +36,15 @@ body {
     justify-content: space-around;
     align-items: center;
     padding: 12px 30px;
-    background: transparent;
+    background-color: transparent;
     backdrop-filter: blur(60px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.015);
     backdrop-filter: blur(60px);
 }
 .header.scrolled {
-    background: rgba(255, 255, 255, 0.646);
+    
     backdrop-filter: blur(60px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.146);
+    
 
 }
 
@@ -1870,4 +1870,38 @@ body {
 .auth-icon {
   text-align: center;
   margin-bottom: 16px;
+}
+
+.horarios-lab {
+  width: 100%;
+  padding: 60px 20px;
+  background-color: rgba(223, 124, 124, 0.531);
+}
+.container-horario {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+.horario-text {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #000000;
+  margin-bottom: 15px;
+}
+.horarios-lab h2 {
+  font-weight: bold;
+  color: #000000;
+}
+
+.horario-text-dia {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.hora-text {
+  font-size: 1.5rem;
+  font-weight:  bold;
+  color: var(--color-text);
+
 }

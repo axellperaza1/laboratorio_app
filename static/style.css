@@ -37,9 +37,9 @@ body {
     align-items: center;
     padding: 12px 30px;
     background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(40px);
+    backdrop-filter: blur(60px);
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    backdrop-filter: blur(40px);
+    backdrop-filter: blur(60px);
 }
 .header.scrolled {
     background: rgba(255, 255, 255, 0.97);
@@ -77,7 +77,7 @@ body {
     top: 70px;
     left: 0;
     width: 100%;
-    background: white;
+    background: transparent;
     flex-direction: column;
     padding: 20px;
     z-index: 999;

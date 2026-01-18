@@ -143,53 +143,6 @@ body {
 }
 
 
-.hero-card h1 {
-    font-size: 50px;
-    margin-bottom: 10px;
-    max-width: 550px;
-    padding: 5px 100px;
-    
-}
-
-.hero-card h2 {
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-
-.hero-card p {
-    display: flex;
-    font-size: 1.2rem;
-    margin-bottom: 30px;
-    margin-block: 20px;
-    max-width: 550px;
-}
-
-.hero-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    text-align: left
-    ;
-}
-
-.btn-primary {
-    background-color: white;
-    color: #5e2129;
-    padding: 12px 24px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.btn-secondary {
-    border: 2px solid white;
-    color: white;
-    padding: 12px 24px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: bold;
-}
-
 
 /* SERVICES */
 .services {
@@ -635,6 +588,7 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 80px 20px; /* CLAVE */
+    background-color: var(--color-primary);
 }
 
 /* TEXTO */

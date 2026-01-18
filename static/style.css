@@ -54,6 +54,15 @@ body {
     font-weight: bold;
     color: #5e2129;
     margin-right: 230px;
+    transform: 0.3s ease;
+}
+
+.header.scrolled{
+  padding: 8px 30px;
+}
+
+.logo.scrolled {
+  transform: scale(0.7);
 }
 
 .logo img {
@@ -141,6 +150,8 @@ body {
    
     
 }
+
+
 
 
 
@@ -588,7 +599,6 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 80px 20px; /* CLAVE */
-    background-color: var(--color-primary);
 }
 
 /* TEXTO */
@@ -599,7 +609,7 @@ body {
 }
 
 .lab-text h2 {
-    font-size: 2.5rem;
+    font-size: 60px;
     margin-bottom: 15px;
 }
 

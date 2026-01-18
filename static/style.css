@@ -36,7 +36,7 @@ body {
     justify-content: space-around;
     align-items: center;
     padding: 12px 30px;
-    background: rgba(255, 255, 255, 0.9);
+    background: transparent;
     backdrop-filter: blur(60px);
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     backdrop-filter: blur(60px);

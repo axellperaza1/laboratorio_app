@@ -1924,6 +1924,14 @@ body {
     
 }
 
+.icono-reloj {
+  transform: 0.4s cubic-bezier(0.22, 1, 0.36,1),
+  filter 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+
+  transform: scale(1);
+}
+
 .icono-reloj:hover {
-  transform: scale(1.15);
+  transform: scale(1.12);
+  filter: brightness(1.1);
 }

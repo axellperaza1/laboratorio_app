@@ -1212,7 +1212,7 @@ body {
 }
 
 .bioanalista-text h2 {
-  font-size: 32px;
+  font-size: 48px;
   margin-bottom: 10px;
 }
 
@@ -1922,4 +1922,8 @@ body {
     width: 350px;
     height: 350px;
     
+}
+
+.icono-reloj:hover {
+  transform: scale(1.15);
 }

@@ -1241,14 +1241,16 @@ body {
     transform: translateY(0) scale(1);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1200px) {
   .bioanalista-container {
     flex-direction: column;
+    height:200vh;
+    
   }
 
   .bioanalista-image {
-    width: 130%;
-    height: 150px;
+    width: 100%;
+    height: 100%;  
   }
 
   .bioanalista-text {

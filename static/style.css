@@ -678,6 +678,27 @@ body {
   opacity: 0.9;
 }
 
+.video-lab video {
+    
+    width: 100%;      /* ✅ NUNCA más de 100% */
+    height: auto;
+    max-width: 640px;
+    display: block;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    transform: scale(1.15);
+    transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.video-lab.show {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.video-lab.show video {
+    transform: scale(1);
+}
+
 /* 📱 MOBILE */
 @media (max-width: 768px) {
 

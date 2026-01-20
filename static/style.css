@@ -2088,14 +2088,14 @@ body {
 /* HERO */
 .contact-hero {
   height: 75vh;
-  background: url("/static/img/contacto_hero.jpg") center/cover no-repeat;
+  background: url("/static/img/contacto_hero.webp") center/cover no-repeat;
   position: relative;
 }
 
 .contact-hero-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.45);
+  background: rgba(78, 21, 21, 0.45);
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -633,7 +633,7 @@ body {
 /* Video */
 .lab-parallax video {
   position: absolute;
-  top: 50%;
+  top: 0%;
   left: 50%;
   width: 120%;
   height: 120%;
@@ -647,7 +647,7 @@ body {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(82, 40, 40, 0.45);
   z-index: 2;
 }
 

@@ -1923,32 +1923,6 @@ body {
 
 }
 
-.horario-image {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #311618;
-}
-.horario-image img {
-    width: 350px;
-    height: 350px;
-    
-}
-
-.horario-image {
-  transform: 0.4s cubic-bezier(0.22, 1, 0.36,1),
-  filter 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-
-  transform: scale(1);
-}
-
-.horario-image:hover {
-  transform: scale(1.12);
-  filter: brightness(1.1);
-}
 
 .lab-video-split {
   display: flex;
@@ -1989,5 +1963,50 @@ body {
 
   .lab-video-text {
     text-align: center;
+  }
+}
+
+.lab-hero-image {
+  position: relative;
+  height: 85vh;
+  background-image: url("/static/img/micro-lab.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* efecto elegante al hacer scroll */
+  display: flex;
+  align-items: center;
+  padding: 0 8%;
+}
+
+.lab-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.lab-hero-content {
+  position: relative;
+  max-width: 600px;
+  color: #fff;
+}
+
+.lab-hero-content h2 {
+  font-size: 2.8rem;
+  margin-bottom: 1rem;
+}
+
+.lab-hero-content p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+  .lab-hero-image {
+    height: 70vh;
+    padding: 0 6%;
+  }
+
+  .lab-hero-content h2 {
+    font-size: 2rem;
   }
 }

@@ -1253,7 +1253,7 @@ body {
 @media (max-width: 1200px) {
   .bioanalista-container {
     flex-direction: column;
-    height:220vh;
+    height:135vh;
     
   }
 

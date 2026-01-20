@@ -1528,7 +1528,7 @@ body {
 }
 
 .trust-container h6 {
-  font-size: 7px;
+  font-size: 25px;
   margin-bottom: 15px;
   color: var(--color-danger);
 }

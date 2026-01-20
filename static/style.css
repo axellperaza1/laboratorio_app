@@ -277,7 +277,7 @@ body {
 }
 
 .footer-brand img {
-    width: 160px;
+    width: 200px;
     filter: brightness(1.3) contrast(1.1);
 }
 
@@ -683,51 +683,8 @@ body {
   opacity: 0.9;
 }
 
-.video-lab video {
-    
-    width: 100%;      /* ✅ NUNCA más de 100% */
-    height: auto;
-    max-width: 640px;
-    display: block;
-    border-radius: 18px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    transform: scale(1.15);
-    transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
 
-.video-lab.show {
-    opacity: 1;
-    transform: scale(1);
-}
 
-.video-lab.show video {
-    transform: scale(1);
-}
-
-/* 📱 MOBILE */
-@media (max-width: 768px) {
-
-    .lab-content {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .lab-text {
-        max-width: 100%;
-    }
-
-    .video-lab video {
-        max-width: 100%;
-    }
-    .auth-buttons {
-        display: none;
-    }
-    .hamburger {
-        display: block;
-    }
-}
-
-/*examenes disponibles HTML*/
 .examenes-list {
     max-width: 1200px;
     margin: 0 auto;
@@ -1991,4 +1948,46 @@ body {
 .horario-image:hover {
   transform: scale(1.12);
   filter: brightness(1.1);
+}
+
+.lab-video-split {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4rem;
+  padding: 6rem 8%;
+}
+
+.lab-video-text {
+  flex: 1;
+}
+
+.lab-video-text h2 {
+  font-size: 2.4rem;
+  margin-bottom: 1rem;
+}
+
+.lab-video-text p {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.lab-video-box {
+  flex: 1;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.015);
+}
+
+@media (max-width: 900px) {
+  .lab-video-split {
+    flex-direction: column;
+    padding: 4rem 6%;
+  }
+
+  .lab-video-text {
+    text-align: center;
+  }
 }

@@ -171,35 +171,26 @@
     </section>
 
 
-    <div class="lab-content">
-    <div class="video-lab">
-        <video autoplay muted loop playsinline>
-            <source src="/static/video/video_lab_ong.mp4" type="video/mp4">
-            tu navegador no soporta este video.
-        </video>
+    <section class="lab-parallax">
 
-        
-    
-    </div>
-    <section class="lab-reveal">
-    <div class="lab-text">
-            <h2>¡Equipos de ultima tecnología!</h2>
-            <p>
-                Somos un laboratorio clínico comprometido con la precisión,
-                la tecnología y la atención humana. Contamos con equipos
-                modernos y personal altamente capacitado para garantizar
-                resultados confiables y rápidos.
-            </p>
+  <video autoplay muted loop playsinline>
+    <source src="/static/video/video_lab_ong.mp4" type="video/mp4">
+    Tu navegador no soporta este video.
+  </video>
 
-            <p>
-                Tu salud es nuestra prioridad. Trabajamos bajo estrictos
-                estándares de calidad para ofrecerte un servicio seguro,
-                eficiente y transparente.
-            </p>
-        </div>
-      </section>  
-    </div>
-    </div>
+  <div class="lab-overlay">
+    <h2>¡Equipos de última tecnología!</h2>
+
+    <p>
+      Somos un laboratorio clínico comprometido con la precisión,
+      la tecnología y la atención humana.
+    </p>
+
+    <p>
+      Tu salud es nuestra prioridad. Trabajamos bajo estrictos
+      estándares de calidad para ofrecerte resultados confiables.
+    </p>
+  </div>
 
 </section>
 
@@ -816,6 +807,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll(".autolab-animate").forEach(el => {
     autolabObserver.observe(el);
+  });
+</script>
+
+<script>
+  window.addEventListener("scroll", () => {
+    const video = document.querySelector(".lab-parallax video");
+    const scroll = window.scrollY;
+
+    video.style.transform =
+      `translate(-50%, calc(-50% + ${scroll * 0.15}px))`;
   });
 </script>
 

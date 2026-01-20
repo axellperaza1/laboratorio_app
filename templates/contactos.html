@@ -1,0 +1,67 @@
+{% extends "global2.html" %}
+
+{% block title %}Contacto | Laboratorio Clínico{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/contact.css') }}">
+{% endblock %}
+
+{% block contenido %}
+
+<!-- HERO CONTACTO -->
+<section class="contact-hero">
+  <div class="contact-hero-overlay">
+    <h1>Contáctanos</h1>
+    <p>Estamos aquí para ayudarte con atención segura, humana y profesional</p>
+  </div>
+</section>
+
+<!-- INFO PRINCIPAL -->
+<section class="contact-info">
+  <div class="contact-card">
+    <h3>📍 Dirección</h3>
+    <p>Av. Principal, Centro Médico NG<br>Barquisimeto, Venezuela</p>
+  </div>
+
+  <div class="contact-card">
+    <h3>📞 Teléfono</h3>
+    <p>+58 412 123 4567</p>
+  </div>
+
+  <div class="contact-card">
+    <h3>📧 Correo</h3>
+    <p>contacto@laboratoriong.com</p>
+  </div>
+
+  <div class="contact-card">
+    <h3>🕒 Horarios</h3>
+    <p>Lunes a Sábado<br>8:00 AM – 5:00 PM</p>
+  </div>
+</section>
+
+<!-- MAPA + TEXTO -->
+<section class="contact-map-section">
+  <div class="contact-text">
+    <h2>Visítanos</h2>
+    <p>
+      Nuestro laboratorio clínico está equipado con tecnología moderna
+      y un equipo humano comprometido con tu bienestar.
+    </p>
+
+    <div class="social-links">
+      <a href="#" aria-label="Instagram">Instagram</a>
+      <a href="#" aria-label="Facebook">Facebook</a>
+      <a href="#" aria-label="WhatsApp">WhatsApp</a>
+    </div>
+  </div>
+
+  <div class="contact-map">
+    <iframe
+      src="https://www.google.com/maps?q=Barquisimeto&output=embed"
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+  </div>
+</section>
+
+{% endblock %}

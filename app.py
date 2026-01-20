@@ -781,6 +781,10 @@ def presupuesto_pdf():
 def autolab():
     return render_template("autolab.html")
 
+@app.route("/contactos")
+def contactos():
+    return render_template("contactos.html")
+
 
 @app.route("/aliados")
 def aliados():

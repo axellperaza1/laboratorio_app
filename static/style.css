@@ -2005,6 +2005,10 @@ body {
   line-height: 1.7;
 }
 
+.btn-info {
+  margin-top: 15px;
+}
+
 @media (max-width: 768px) {
   .lab-hero-image {
     height: 70vh;

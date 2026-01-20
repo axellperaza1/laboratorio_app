@@ -1964,6 +1964,11 @@ body {
   .lab-video-text {
     text-align: center;
   }
+
+  .autolab-section {
+    flex-direction: column;
+    
+  }
 }
 
 .lab-hero-image {

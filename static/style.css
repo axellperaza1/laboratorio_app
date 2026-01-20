@@ -1420,7 +1420,7 @@ body {
 
 
 .hero-card h1 {
-  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-size: 3.7rem;
   font-weight: 1000;
   line-height: 1.15;
   margin-bottom: 22px;
@@ -1852,13 +1852,14 @@ body {
 /* BOTÓN PRINCIPAL */
 .btn-primary {
   margin-top: 10px;
-  padding: 12px;
+  padding: 17px;
   background: linear-gradient(135deg, #3c0606, #732323);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 20px;
   font-size: 15px;
   font-weight: 500;
+  text-decoration: none;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }

@@ -2017,6 +2017,7 @@ body {
 .lab-hero-content p {
   font-size: 1.1rem;
   line-height: 1.7;
+  margin-bottom: 30px;
 }
 
 .btn-info {
@@ -2039,6 +2040,3 @@ body {
   }
 }
 
-.btn-informacion {
-  margin-top: 15px;
-}

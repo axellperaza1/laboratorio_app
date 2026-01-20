@@ -1244,7 +1244,7 @@ body {
 @media (max-width: 1200px) {
   .bioanalista-container {
     flex-direction: column;
-    height:150vh;
+    height:220vh;
     
   }
 
@@ -1525,6 +1525,12 @@ body {
     text-align: center;
     padding: 50px;
 
+}
+
+.trust-container h6 {
+  font-size: 7px;
+  margin-bottom: 15px;
+  color: var(--color-danger);
 }
 
 .trust-title {

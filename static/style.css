@@ -1958,7 +1958,7 @@ body {
 @media (max-width: 768px) {
   .lab-video-split {
     flex-direction: column;
-    padding: 4rem 6%;
+    padding: 2rem 6%;
   }
 
   .lab-video-text {

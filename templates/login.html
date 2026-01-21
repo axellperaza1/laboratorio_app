@@ -1,4 +1,4 @@
-{% extends "bas2.html" %}
+{% extends "base2.html" %}
 
 {% block title %}Iniciar sesión{% endblock %}
 
@@ -9,38 +9,48 @@
 {% block contenido %}
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <div class="card shadow-lg p-4 login-card">
-            <h1>Iniciar sesión</h1>
+        <h1 class="text-center mb-4">Iniciar sesión</h1>
 
-            <form method="POST">
-                <div class="mb-3">
-          <label class="form-label">Contraseña</label>
-          <input
-            type="password"
-            name="contraseña"
-            class="form-control"
-            placeholder="Contraseña Segura"
-            minlength="8"
-            required
-          />
-        </div>
+        <form method="POST">
 
-        <div class="forgot-password">
-          <a href="{{ url_for ('recuperar_password') }}"> ¿Olvidaste tu contraseña? 
-            
-          </a>
-        </div>
-
-                <button class="btn btn-primary">Entrar</button>
-            </form>
-            {% if error%}
-            <div class="alert alert-danger text-center">
-                {{ error }}
+            <!-- EMAIL -->
+            <div class="mb-3">
+                <label class="form-label">Correo electrónico</label>
+                <input
+                    type="email"
+                    name="email"
+                    class="form-control"
+                    placeholder="correo@ejemplo.com"
+                    required
+                    value="{{ request.form.email if request.method == 'POST' else '' }}"
+                />
             </div>
-            {% endif %}
-            <div class="login-links">
-                <a href="{{ url_for('registro') }}">¿Aún no tienes cuenta?</a><br>
-                <a href="{{ url_for('index') }}">Volver al inicio</a>
+
+            <!-- CONTRASEÑA -->
+            <div class="mb-3">
+                <label class="form-label">Contraseña</label>
+                <input
+                    type="password"
+                    name="contraseña"
+                    class="form-control"
+                    placeholder="Contraseña"
+                    minlength="8"
+                    required
+                />
             </div>
+
+            <button class="btn btn-primary w-100">Entrar</button>
+        </form>
+
+        {% if error %}
+        <div class="alert alert-danger text-center mt-3">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <div class="login-links text-center mt-3">
+            <a href="{{ url_for('registro') }}">¿Aún no tienes cuenta?</a><br>
+            <a href="{{ url_for('index') }}">Volver al inicio</a>
         </div>
     </div>
 </div>

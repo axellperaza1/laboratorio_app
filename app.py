@@ -25,10 +25,33 @@ from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 from werkzeug.security import generate_password_hash
 import secrets
+from flask import current_app
+
 
 
 
 app = Flask(__name__)
+
+def conectar():
+    try:
+        database_url = os.getenv("DATABASE_URL")
+
+        if database_url:
+            # PRODUCCIÓN (Railway)
+            return psycopg2.connect(database_url)
+
+        # LOCAL
+        return psycopg2.connect(
+            host="localhost",
+            database="laboratorio_clinico_ong",
+            user="postgres",
+            password="Aapf*18*",
+            port="5432"
+        )
+
+    except Exception as e:
+        print("❌ ERROR DE CONEXIÓN:", e)
+        return None
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -39,13 +62,13 @@ app.wsgi_app = WhiteNoise(
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = "587"
 app.config["MAIL_USE_TLS"] = True
-app.config["MAIL_USERNAME"] = "tucorreo@gmail.com"
-app.config["MAIL_PASSWORD"] = "CLAVE_DE_APP"
-app.config["MAIL_DEFAULT_SERNDER"] = "Laboratorio Clínico ONG"
+app.config["MAIL_USERNAME"] = "laboratorioclinicoongca@gmail.com"
+app.config["MAIL_PASSWORD"] = "wlrjhnzdoxdqmqyp"
+app.config["MAIL_DEFAULT_SENDER"] = ("Laboratorio Clínico ONG <laboratorioclinicoongca@gmail.com>")
 
 mail = Mail(app)
 
-app.secret_key = os.environ.get("SECRET_KEY", "clave-local-segura")
+app.secret_key = os.environ.get("SECRET_KEY", "Aapf*18*")
 
 serializer = URLSafeTimedSerializer(app.secret_key)
 
@@ -65,20 +88,6 @@ def validad_token(token, tiempo=3600):
 @app.route("/")
 def index():
     return render_template("index.html")
-
-
-
-
-import os
-import psycopg2
-
-
-def conectar():
-    database_url = os.getenv("DATABASE_URL")
-
-    if database_url:
-        # PRODUCCIÓN (Railway)
-        return psycopg2.connect(database_url)
 
 
 # Este es el sistema de seguridad básico.
@@ -199,33 +208,45 @@ def examenes_realizados(paciente_id):
 # este es para logear el cliente
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    error = None
+
     if request.method == "POST":
         email = request.form["email"]
         contraseña = request.form["contraseña"]
 
-        # Verificar si el cliente existe en la base de datos
         conexion = conectar()
+
+        if conexion is None:
+            error = "Error de conexión con la base de datos"
+            return render_template("login.html", error=error)
+
         cursor = conexion.cursor(cursor_factory=DictCursor)
+
         cursor.execute(
-            "SELECT * FROM clientes WHERE email = %s AND contraseña = %s",
-            (email, contraseña),
+            "SELECT id, nombre, contraseña, confirmado FROM clientes WHERE email = %s",
+            (email,)
         )
+
         cliente = cursor.fetchone()
 
-        if cliente:  # Si el cliente existe
-            # Guardamos la información del cliente en la sesión (para mantenerlo logueado)
-            session["cliente_id"] = int(cliente["id"])
-            session["cliente_nombre"] = cliente["nombre"]
-            return redirect(
-                url_for("dashboard", cliente_id=cliente["id"])
-            )  # Redirigir al perfil del cliente
-        else:
-            # Si las credenciales no coinciden
-            return render_template(
-                "login.html", error="Correo o contraseñas incorrectos"
-            )
+        cursor.close()
+        conexion.close()
 
-    return render_template("login.html")
+        if not cliente:
+            error = "Correo no registrado"
+
+        elif cliente["contraseña"] != contraseña:
+            error = "Contraseña incorrecta"
+
+        elif not cliente["confirmado"]:
+            error = "Debes confirmar tu correo antes de iniciar sesión"
+
+        else:
+            session["cliente_id"] = cliente["id"]
+            session["cliente_nombre"] = cliente["nombre"]
+            return redirect(url_for("dashboard"))
+
+    return render_template("login.html", error=error)
 
 
 # perfil de el usuario
@@ -270,38 +291,100 @@ def registro():
         telefono = request.form["telefono"]
         contraseña = request.form["contraseña"]
 
-        # ❌ Contraseña inválida → NO seguimos
+        # 1️⃣ Validar contraseña
         if not contraseña_valida(contraseña):
             error = "La contraseña debe tener al menos 8 caracteres, letras, números y símbolos."
             return render_template("registro.html", error=error)
 
-        # 🔐 Hashear contraseña
-        contraseña_hash = generate_password_hash(contraseña)
+        conexion = conectar()
+        cursor = conexion.cursor()
 
-        try:
-            conexion = conectar()
-            cursor = conexion.cursor()
-            cursor.execute(
-                """
-                INSERT INTO clientes (nombre, email, cedula, telefono, contraseña)
-                VALUES (%s, %s, %s, %s, %s)
-                """,
-                (nombre, email, cedula, telefono, contraseña_hash),
-            )
-            conexion.commit()
-        except Exception as e:
-            conexion.rollback()
-            error = "Error al registrar usuario. Intente más tarde."
-            print(e)
-            return render_template("registro.html", error=error)
-        finally:
+        # 2️⃣ Verificar si el correo ya existe
+        cursor.execute("SELECT id FROM clientes WHERE email = %s", (email,))
+        existe = cursor.fetchone()
+
+        if existe:
+            error = "Este correo ya está registrado. Usa otro correo."
             cursor.close()
             conexion.close()
+            return render_template("registro.html", error=error)
+
+        # 3️⃣ Crear token
+        token = secrets.token_urlsafe(32)
+
+        # 4️⃣ Insertar cliente (NO confirmado)
+        cursor.execute("""
+            INSERT INTO clientes (
+                nombre, email, cedula, telefono,
+                contraseña, confirmado, token_confimacion
+            )
+            VALUES (%s, %s, %s, %s, %s, FALSE, %s)
+        """, (nombre, email, cedula, telefono, contraseña, token))
+
+        conexion.commit()
+        cursor.close()
+        conexion.close()
+
+        # 5️⃣ Enlace de confirmación
+        link_confirmacion = url_for(
+            "confirmar_cuenta",
+            token=token,
+            _external=True
+        )
+
+        # 6️⃣ Enviar correo
+        msg = Message(
+            subject="Confirma tu cuenta - Laboratorio Clínico ONG",
+            recipients=[email]
+        )
+
+        msg.body = f"""
+Hola {nombre},
+
+Gracias por registrarte en Laboratorio Clínico ONG.
+
+Para activar tu cuenta, haz clic en el siguiente enlace:
+
+{link_confirmacion}
+
+Si no creaste esta cuenta, ignora este mensaje.
+"""
+
+        mail.send(msg)
 
         return redirect(url_for("login"))
 
-    # GET
-    return render_template("registro.html")
+    return render_template("registro.html", error=error)
+
+@app.route("/confirmar/<token>")
+def confirmar_cuenta(token):
+    conexion = conectar()
+    cursor = conexion.cursor()
+
+    cursor.execute("""
+        SELECT id FROM clientes
+        WHERE token_confimacion = %s AND confirmado = FALSE
+    """, (token,))
+
+    usuario = cursor.fetchone()
+
+    if not usuario:
+        cursor.close()
+        conexion.close()
+        return "Token inválido o cuenta ya confirmada"
+
+    cursor.execute("""
+        UPDATE clientes
+        SET confirmado = TRUE,
+            token_confimacion = NULL
+        WHERE id = %s
+    """, (usuario[0],))
+
+    conexion.commit()
+    cursor.close()
+    conexion.close()
+
+    return render_template("confirmado.html")
 
 
 # consulta de examenes disponibles
@@ -793,7 +876,9 @@ def presupuesto_pdf():
     mimetype="application/pdf",
     headers={"Content-Disposition": "inline; filename=presupuesto_examenes.pdf"},
 )
-
+@app.route('/enviado')
+def enviado():
+    return render_template("enviado.html")
 
 @app.route("/autolab")
 def autolab():

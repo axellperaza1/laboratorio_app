@@ -1,9 +1,16 @@
-from db import conectar
+import psycopg2
 
-conexion = conectar ()
+try:
+    conexion = psycopg2.connect(
+            host="localhost",
+            database="laboratorio_clinico_ong",
+            user="postgres",
+            password="Aapf*18*",
+            port="5432"
+        )
+    print("si")
+    conexion.close()
 
-if conexion:
-    print(" CONECTADO EXISTOSAMENTE")
-
-else:
-    print(" NO SE PUDO CONECTAR, REVISA LA CONEXION")
+except Exception as e:
+    print("no")
+    print(e)

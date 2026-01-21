@@ -1,0 +1,14 @@
+{% extends "base2.html" %}
+
+{% block title %}Cuenta confirmada{% endblock %}
+
+{% block contenido %}
+<div class="container text-center mt-5">
+    <h2>✅ Cuenta confirmada</h2>
+    <p>Tu cuenta ha sido activada correctamente.</p>
+
+    <a href="{{ url_for('login') }}" class="btn btn-primary mt-3">
+        Iniciar sesión
+    </a>
+</div>
+{% endblock %}

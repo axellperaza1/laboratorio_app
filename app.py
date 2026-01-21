@@ -352,7 +352,7 @@ Si no creaste esta cuenta, ignora este mensaje.
 
         mail.send(msg)
 
-        return redirect(url_for("login"))
+        return redirect(url_for("enviado"))
 
     return render_template("registro.html", error=error)
 
@@ -876,6 +876,9 @@ def presupuesto_pdf():
     mimetype="application/pdf",
     headers={"Content-Disposition": "inline; filename=presupuesto_examenes.pdf"},
 )
+@app.route('/enviado')
+def enviado():
+    return render_template("enviado.html")
 
 @app.route("/autolab")
 def autolab():

@@ -1,57 +1,91 @@
 {% extends "base2.html" %}
 
-{% block title %}Registro de Pacientes{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/registro.css') }}">
-{% endblock %}
+{% block title %}Registro de Paciente{% endblock %}
 
 {% block contenido %}
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="card shadow-lg p-4 login-card">
-        <h2 class="text-center mb-4">Registro de Paciente</h2>
+  <div class="card shadow-lg p-4 auth-card" style="max-width: 500px; width: 100%;">
 
-        <form method="POST">
-            <div class="mb-3">
-                <label class="form-label">Nombre completo</label>
-                <input type="text" name="nombre" class="form-control" required>
-            </div>
+    <h2 class="text-center mb-3">Registro de Paciente</h2>
+    <p class="text-center text-muted mb-4">
+      Completa tus datos para crear tu cuenta
+    </p>
 
-            <div class="mb-3">
-                <label class="form-label">Cédula</label>
-                <input type="Text" name="cedula" class="form-control" required>
-            </div>
-            
+    <!-- MENSAJE DE ERROR -->
+    {% if error %}
+      <div class="alert alert-danger text-center">
+        {{ error }}
+      </div>
+    {% endif %}
 
-            <div class="mb-3">
-                <label class="form-label">telefono</label>
-                <input type="text" name="telefono" class="form-control" required>
-            </div>
-            
-            <div class="mb-3">
-                <label class="form-label">Correo Electronico</label>
-                <input type="email" name="email" class="form-control" required>
-            </div>
-            
+    <form method="POST" novalidate>
 
-            <div class="mb-3">
-                <label class="form-label">Contraseña</label>
-                <input type="password" name="contraseña" class="form-control" required>
-            </div>
+      <div class="mb-3">
+        <label class="form-label">Nombre completo</label>
+        <input
+          type="text"
+          name="nombre"
+          class="form-control"
+          value="{{ nombre | default('') }}"
+          required
+        />
+      </div>
 
-            <div class="mb-3">
-                <label class="form-label">Confirmar contraseña</label>
-                <input type="password" name="confirmar_contraseña" class="form-control" required>
-            </div>
+      <div class="mb-3">
+        <label class="form-label">Correo electrónico</label>
+        <input
+          type="email"
+          name="email"
+          class="form-control"
+          value="{{ email | default('') }}"
+          required
+        />
+      </div>
 
-            <button type="submit" class="btn btn-primary w-100">
-                Registrarse
-            </button>
+      <div class="mb-3">
+        <label class="form-label">Cédula</label>
+        <input
+          type="text"
+          name="cedula"
+          class="form-control"
+          value="{{ cedula | default('') }}"
+          required
+        />
+      </div>
 
-            <div class="text-center mt-3">
-                <a href="{{ url_for('login') }}">¿Ya tienes cuenta? Inicia sesión</a>
-            </div>
-        </form>
+      <div class="mb-3">
+        <label class="form-label">Teléfono</label>
+        <input
+          type="text"
+          name="telefono"
+          class="form-control"
+          value="{{ telefono | default('') }}"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Contraseña</label>
+        <input
+          type="password"
+          name="contraseña"
+          class="form-control"
+          placeholder="Mínimo 8 caracteres, letras, números y símbolos"
+          required
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">
+        Registrarse
+      </button>
+    </form>
+
+    <div class="text-center mt-4">
+      <a href="{{ url_for('login') }}" class="text-muted">
+        ¿Ya tienes cuenta? Inicia sesión
+      </a>
     </div>
+
+  </div>
 </div>
 {% endblock %}

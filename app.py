@@ -257,8 +257,12 @@ def perfil():
 
 
 # area de registro de los clientes, por si no tiene usuario
+from werkzeug.security import generate_password_hash
+
 @app.route("/registro", methods=["GET", "POST"])
 def registro():
+    error = None
+
     if request.method == "POST":
         nombre = request.form["nombre"]
         email = request.form["email"]
@@ -266,24 +270,38 @@ def registro():
         telefono = request.form["telefono"]
         contraseña = request.form["contraseña"]
 
+        # ❌ Contraseña inválida → NO seguimos
         if not contraseña_valida(contraseña):
             error = "La contraseña debe tener al menos 8 caracteres, letras, números y símbolos."
+            return render_template("registro.html", error=error)
 
-        # Guardar en la base de datos (no olvides validar)
-        conexion = conectar()
-        cursor = conexion.cursor()
-        cursor.execute(
-            "INSERT INTO clientes (nombre, email, cedula, telefono, contraseña) VALUES (%s, %s, %s, %s, %s)",
-            (nombre, email, cedula, telefono, contraseña),
-        )
-        conexion.commit()
-        cursor.close()
-        conexion.close()
+        # 🔐 Hashear contraseña
+        contraseña_hash = generate_password_hash(contraseña)
 
-        return redirect(url_for("login"))  # Redirigir al login después de registrar
+        try:
+            conexion = conectar()
+            cursor = conexion.cursor()
+            cursor.execute(
+                """
+                INSERT INTO clientes (nombre, email, cedula, telefono, contraseña)
+                VALUES (%s, %s, %s, %s, %s)
+                """,
+                (nombre, email, cedula, telefono, contraseña_hash),
+            )
+            conexion.commit()
+        except Exception as e:
+            conexion.rollback()
+            error = "Error al registrar usuario. Intente más tarde."
+            print(e)
+            return render_template("registro.html", error=error)
+        finally:
+            cursor.close()
+            conexion.close()
 
-    return render_template("registro.html",
-                           error=error)
+        return redirect(url_for("login"))
+
+    # GET
+    return render_template("registro.html")
 
 
 # consulta de examenes disponibles

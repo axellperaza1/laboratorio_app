@@ -876,9 +876,6 @@ def presupuesto_pdf():
     mimetype="application/pdf",
     headers={"Content-Disposition": "inline; filename=presupuesto_examenes.pdf"},
 )
-@app.route('/enviado')
-def enviado():
-    return render_template("enviado.html")
 
 @app.route("/autolab")
 def autolab():

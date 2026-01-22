@@ -21,16 +21,17 @@ from reportlab.lib.utils import ImageReader
 from io import BytesIO
 from whitenoise import WhiteNoise
 from reportlab.lib.colors import Color
-from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 from werkzeug.security import generate_password_hash
 import secrets
 from flask import current_app
-
-
+import resend
+from dotenv import load_dotenv
+load_dotenv()
 
 
 app = Flask(__name__)
+
 
 def conectar():
     try:
@@ -59,18 +60,25 @@ app.wsgi_app = WhiteNoise(
     app.wsgi_app, root=os.path.join(BASE_DIR, "static"), prefix="static/"
 )
 
-app.config["MAIL_SERVER"] = "smtp.gmail.com"
-app.config["MAIL_PORT"] = "587"
-app.config["MAIL_USE_TLS"] = True
-app.config["MAIL_USERNAME"] = "laboratorioclinicoongca@gmail.com"
-app.config["MAIL_PASSWORD"] = "wlrjhnzdoxdqmqyp"
-app.config["MAIL_DEFAULT_SENDER"] = ("Laboratorio Clínico ONG <laboratorioclinicoongca@gmail.com>")
-
-mail = Mail(app)
-
 app.secret_key = os.environ.get("SECRET_KEY", "Aapf*18*")
 
 serializer = URLSafeTimedSerializer(app.secret_key)
+
+resend.api_key = os.getenv("RESEND_API_KEY")
+
+def enviar_correo_confirmacion(email, nombre, token):
+    link = url_for("confirmar_cuenta", token=token, _external=True)
+
+    resend.Emails.send({
+        "from": "Laboratorio clínico ONG <noreply@tudominio.com>",
+        "to": [email],
+        "subject": "Bienvenido al Laboratorio Clínico ONG",
+        "html": f"""
+        <h3>Hola {nombre}</h3>
+        <p>Haz clic en el botón para confirmar tu cuenta:</p>
+        <a href="{link}">Confirmar cuenta</a>
+        """
+    })
 
 def generar_token(email):
     return serializer.dumps(email,salt="recuperar-password")
@@ -100,29 +108,6 @@ def login_required(f):
         return f(*args, **kwargs)
 
     return decorated_function
-
-
-# Página de exámenes disponibles
-@app.route("/examenes")
-def examenes():
-    conexion = conectar()
-    cursor = conexion.cursor()
-    cursor.execute("SELECT * FROM examenes")
-    lista_examenes = cursor.fetchall()
-    cursor.close()
-    conexion.close()
-
-    examenes = [
-        {
-            "id": examen[0],
-            "nombre_examen": examen[1],
-            "descripcion": examen[2],
-            "precio": examen[3],
-        }
-        for examen in lista_examenes
-    ]
-
-    return render_template("examenes.html", examenes=examenes)
 
 
 # para registrar los examenes en el area de personal
@@ -284,123 +269,104 @@ from werkzeug.security import generate_password_hash
 def registro():
     error = None
 
+    data = {
+        "nombre": "",
+        "email": "",
+        "cedula": "",
+        "telefono": ""
+    }
+
     if request.method == "POST":
-        nombre = request.form["nombre"]
-        email = request.form["email"]
-        cedula = request.form["cedula"]
-        telefono = request.form["telefono"]
+        data["nombre"] = request.form["nombre"]
+        data["email"] = request.form["email"]
+        data["cedula"] = request.form["cedula"]
+        data["telefono"] = request.form["telefono"]
         contraseña = request.form["contraseña"]
 
         # 1️⃣ Validar contraseña
         if not contraseña_valida(contraseña):
             error = "La contraseña debe tener al menos 8 caracteres, letras, números y símbolos."
-            return render_template("registro.html", error=error)
+            return render_template("registro.html", error=error, data=data)
 
         conexion = conectar()
+        if conexion is None:
+            error = "Error de conexión con la base de datos"
+            return render_template("registro.html", error=error, data=data)
+
         cursor = conexion.cursor()
 
-        # 2️⃣ Verificar si el correo ya existe
-        cursor.execute("SELECT id FROM clientes WHERE email = %s", (email,))
-        existe = cursor.fetchone()
-
-        if existe:
-            error = "Este correo ya está registrado. Usa otro correo."
+        # 2️⃣ Verificar correo duplicado
+        cursor.execute("SELECT id FROM clientes WHERE email = %s", (data["email"],))
+        if cursor.fetchone():
+            error = "Este correo ya está registrado"
             cursor.close()
             conexion.close()
-            return render_template("registro.html", error=error)
+            return render_template("registro.html", error=error, data=data)
 
         # 3️⃣ Crear token
         token = secrets.token_urlsafe(32)
 
-        # 4️⃣ Insertar cliente (NO confirmado)
+        # 4️⃣ Insertar usuario NO confirmado
         cursor.execute("""
-            INSERT INTO clientes (
-                nombre, email, cedula, telefono,
-                contraseña, confirmado, token_confimacion
-            )
+            INSERT INTO clientes 
+            (nombre, email, cedula, telefono, contraseña, confirmado, token_confimacion)
             VALUES (%s, %s, %s, %s, %s, FALSE, %s)
-        """, (nombre, email, cedula, telefono, contraseña, token))
+        """, (
+            data["nombre"],
+            data["email"],
+            data["cedula"],
+            data["telefono"],
+            contraseña,
+            token
+        ))
 
         conexion.commit()
         cursor.close()
         conexion.close()
 
-        # 5️⃣ Enlace de confirmación
-        link_confirmacion = url_for(
-            "confirmar_cuenta",
-            token=token,
-            _external=True
+        # 5️⃣ Enviar correo
+        enviar_correo_confirmacion(
+            data["email"],
+            data["nombre"],
+            token
         )
 
-        # 6️⃣ Enviar correo
-        msg = Message(
-            subject="Confirma tu cuenta - Laboratorio Clínico ONG",
-            recipients=[email]
-        )
+        return redirect(url_for("login"))
 
-        msg.body = f"""
-Hola {nombre},
+    return render_template("registro.html", error=error, data=data)
 
-Gracias por registrarte en Laboratorio Clínico ONG.
-
-Para activar tu cuenta, haz clic en el siguiente enlace:
-
-{link_confirmacion}
-
-Si no creaste esta cuenta, ignora este mensaje.
-"""
-
-        mail.send(msg)
-
-        return redirect(url_for("enviado"))
-
-    return render_template("registro.html", error=error)
 
 @app.route("/confirmar/<token>")
 def confirmar_cuenta(token):
     conexion = conectar()
+    if conexion is None:
+        return "Error de conexión"
+
     cursor = conexion.cursor()
 
     cursor.execute("""
-        SELECT id FROM clientes
-        WHERE token_confimacion = %s AND confirmado = FALSE
+        SELECT id FROM clientes 
+        WHERE token_confirmacion = %s AND confirmado = FALSE
     """, (token,))
 
-    usuario = cursor.fetchone()
+    cliente = cursor.fetchone()
 
-    if not usuario:
+    if not cliente:
         cursor.close()
         conexion.close()
         return "Token inválido o cuenta ya confirmada"
 
     cursor.execute("""
-        UPDATE clientes
-        SET confirmado = TRUE,
-            token_confimacion = NULL
+        UPDATE clientes 
+        SET confirmado = TRUE, token_confirmacion = NULL
         WHERE id = %s
-    """, (usuario[0],))
+    """, (cliente[0],))
 
     conexion.commit()
     cursor.close()
     conexion.close()
 
-    return render_template("confirmado.html")
-
-
-# consulta de examenes disponibles
-@app.route("/examenes_disponibles", methods=["GET"])
-def examenes_disponibles():
-    conexion = conectar()
-    cursor = conexion.cursor(cursor_factory=DictCursor)
-
-    # Obtener todos los exámenes disponibles
-    cursor.execute(" SELECT * FROM examenes")
-    examenes = cursor.fetchall()
-
-    cursor.close()
-    conexion.close()
-
-    return render_template("examenes_disponibles.html", examenes=examenes)
+    return "Cuenta confirmada correctamente. Ya puedes iniciar sesión."
 
 
 # login del personal, donde se puede logear
@@ -476,6 +442,21 @@ def panel_personal():
 def logout():
     session.clear()
     return render_template("index.html")
+
+# consulta de examenes disponibles
+@app.route("/examenes_disponibles", methods=["GET"])
+def examenes_disponibles():
+    conexion = conectar()
+    cursor = conexion.cursor(cursor_factory=DictCursor)
+
+    # Obtener todos los exámenes disponibles
+    cursor.execute(" SELECT * FROM examenes")
+    examenes = cursor.fetchall()
+
+    cursor.close()
+    conexion.close()
+
+    return render_template("examenes_disponibles.html", examenes=examenes)
 
 
 # funcion solo para el personal del lab
@@ -898,11 +879,11 @@ def forgot_password():
     if request.method == "POST":
         email = request.form["email"]
 
-        conn = conectar()
-        cur = conn.cursor()
+        conexion = conectar()
+        cursor = conexion.cursor()
 
-        cur.execute("SELECT email FROM clientes WHERE email = %s", (email,))
-        cliente = cur.fetchone()
+        cursor.execute("SELECT email FROM clientes WHERE email = %s", (email,))
+        cliente = cursor.fetchone()
 
         if not cliente:
             return render_template(
@@ -913,14 +894,14 @@ def forgot_password():
         token = secrets.token_urlsafe(32)
         expires = datetime.now() + timedelta(hours=1)
 
-        cur.execute(
+        cursor.execute(
             "INSERT INTO password_reset (email, token, expires_at) VALUES (%s, %s, %s)",
             (email, token, expires)
         )
 
-        conn.commit()
-        cur.close()
-        conn.close()
+        conectar.commit()
+        cursor.close()
+        conexion.close()
 
         # aquí luego conectamos el envío de correo
         print(f"LINK: https://tudominio.com/reset-password/{token}")

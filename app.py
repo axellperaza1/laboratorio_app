@@ -64,13 +64,13 @@ app.secret_key = os.environ.get("SECRET_KEY", "Aapf*18*")
 
 serializer = URLSafeTimedSerializer(app.secret_key)
 
-resend.api_key = os.getenv("RESEND_API_KEY")
+resend.api_key = os.environ.get("RESEND_API_KEY")
 
 def enviar_correo_confirmacion(email, nombre, token):
     link = url_for("confirmar_cuenta", token=token, _external=True)
 
     resend.Emails.send({
-        "from": "Laboratorio clínico ONG <noreply@tudominio.com>",
+        "from": "Laboratorio clínico ONG <noreply@www.laboratorioclinicoong.com>",
         "to": [email],
         "subject": "Bienvenido al Laboratorio Clínico ONG",
         "html": f"""

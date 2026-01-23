@@ -70,7 +70,7 @@ def enviar_correo_confirmacion(email, nombre, token):
     link = url_for("confirmar_cuenta", token=token, _external=True)
 
     resend.Emails.send({
-        "from": "Laboratorio clínico ONG <noreply@www.laboratorioclinicoong.com>",
+        "from": "Laboratorio clínico ONG <noreply@laboratorioclinicoong.com>",
         "to": [email],
         "subject": "Bienvenido al Laboratorio Clínico ONG",
         "html": f"""

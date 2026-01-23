@@ -366,7 +366,7 @@ def confirmar_cuenta(token):
     cursor.close()
     conexion.close()
 
-    return redirect(url_for ("confirmado"))
+    return "Cuenta confirmada correctamente. Ya puedes iniciar sesión ✅."
 
 
 # login del personal, donde se puede logear

@@ -309,7 +309,7 @@ def registro():
         # 4️⃣ Insertar usuario NO confirmado
         cursor.execute("""
             INSERT INTO clientes 
-            (nombre, email, cedula, telefono, contraseña, confirmado, token_confimacion)
+            (nombre, email, cedula, telefono, contraseña, confirmado, token_confirmacion)
             VALUES (%s, %s, %s, %s, %s, FALSE, %s)
         """, (
             data["nombre"],

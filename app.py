@@ -4,7 +4,7 @@ import re
 from psycopg2.extras import DictCursor
 import psycopg2
 from functools import wraps
-from flask import session, redirect, url_for, send_from_directory
+from flask import session, redirect, url_for
 from flask import request, jsonify, make_response, Response
 from datetime import datetime, timedelta
 import qrcode
@@ -29,7 +29,7 @@ from flask import current_app
 import resend
 from dotenv import load_dotenv
 load_dotenv()
-
+from flask import send_from_directory
 
 app = Flask(__name__)
 
@@ -1024,7 +1024,7 @@ def get_historial(cliente_id):
         return jsonify({"error": str(e)}), 500
 
 @app.route("/sitemap.xml")
-def sitemap();
+def sitemap():
     return send_from_directory(
         directory="static",
         path="sitemap.xml",

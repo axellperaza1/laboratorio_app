@@ -87,6 +87,10 @@
                 <a href="#personal">Nuestro Equipo</a>
                 <a href="{{ url_for('contactos')}}">Contacto</a>
                 <a href="https://api.whatsapp.com/send/?phone=584145286666&text&type=phone_number&app_absent=0">Envianos un mensaje de Whatsapp</a>
+
+                <button class="btn-primary" id="btn-auth">
+                  <a href="{{url_for ('login')}}">Area de pacientes</a>
+                </button>
             </nav>
          </div>
 
@@ -509,8 +513,6 @@
 </div>
 
 
-<button class="mobile-cotizar-btn" id="mobileCotizar">👤</button>
-<!--Contador de aliados comerciales-->
 
 <script>
   const passwordInput = document.querySelector('input[name=password]');
@@ -819,6 +821,23 @@ document.addEventListener("DOMContentLoaded", () => {
     video.style.transform =
       `translate(-50%, calc(-50% + ${scroll * 0.15}px))`;
   });
+</script>
+
+<script>
+ document.addEventListener("DOMContentLoaded", () => {
+  const header = document.querySelector(".header");
+
+  const handleScrolled = () => {
+    if (window.scrollY <= 10) {
+      header.classList.remove("scrolled");
+    }else {
+      header.classList.add("scrolled");
+    }
+  };
+  handleScrolled();
+
+  window.addEventListener("scroll", handleScrolled);
+ });
 </script>
 
 

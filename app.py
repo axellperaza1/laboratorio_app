@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 import qrcode
 import io
 import base64
+from flask import Flask, jsonify
 from werkzeug.utils import secure_filename
 import os
 from reportlab.pdfgen import canvas
@@ -976,6 +977,51 @@ def contraseña_valida(password):
     if not re.search(r"[^A-Za-z0-9]", password):
         return False
     return True
+
+
+@app.route("/get_historial/<int:cliente_id>")
+def get_historial(cliente_id):
+    try:
+        conexion = conectar()
+        # Quitamos el DictCursor un momento para probar con el cursor normal (más estable)
+        cursor = conexion.cursor() 
+        
+        query = """
+            SELECT e.nombre_examen, r.archivo_pdf, r.fecha
+            FROM resultados r
+            JOIN examenes e ON r.examen_id = e.id
+            WHERE r.cliente_id = %s
+            ORDER BY r.fecha DESC 
+            LIMIT 5
+        """
+        cursor.execute(query, (cliente_id,))
+        historial = cursor.fetchall()
+        
+        cursor.close()
+        conexion.close()
+
+        resultados_limpios = []
+        for fila in historial:
+            # fila[0] = nombre_examen, fila[1] = archivo_pdf, fila[2] = fecha
+            fecha_str = "Sin fecha"
+            if fila[2]:
+                try:
+                    fecha_str = fila[2].strftime("%d/%m/%Y %I:%M %p")
+                except:
+                    fecha_str = str(fila[2])
+
+            resultados_limpios.append({
+                "nombre_examen": str(fila[0]),
+                "archivo_pdf": str(fila[1]),
+                "fecha": fecha_str
+            })
+            
+        return jsonify(resultados_limpios)
+
+    except Exception as e:
+        # IMPORTANTE: Mira tu terminal negra de Python, ahí saldrá el error real
+        print(f"Error detectado: {e}") 
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)

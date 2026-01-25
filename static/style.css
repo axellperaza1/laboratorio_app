@@ -29,47 +29,71 @@ body {
 
 /* HEADER */
 .header {
-    display: flex;
-    position: sticky;
+    position: fixed;
     top: 0;
-    z-index: 999;
-    justify-content: space-around;
+    width: 100%;
+    height: 90px;
+    padding: 28px 40px;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    padding: 12px 30px;
-    background-color: transparent;
-    backdrop-filter: blur(60px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.015);
-    backdrop-filter: blur(60px);
-}
-.header.scrolled {
-    
-    backdrop-filter: blur(60px);
-    
 
+    background: transparent;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+.header a{
+  color: white;
+  font-size: 1.2rem;
+}
+.header button{
+  color: white;
+  background: var(--color-primary);
+}
+
+.header img {
+  height: 60px;
+  transition: all 0.4s ease;
 }
 
 
 
 .logo {
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     font-weight: bold;
-    color: #5e2129;
-    margin-right: 230px;
-    transform: 0.3s ease;
+    color: var(--color-primary);
+    transition: filter 0.35s ease, transform 0.35s ease;
+    filter:brightness(0) invert(1);
 }
 
 .header.scrolled{
-  padding: 8px 30px;
+  padding: 14px 60px;
+  background: white;
+  box-shadow: 0 0.1px 10px;
+}
+
+.header.scrolled .logo {
+  filter: none;
+}
+
+.header.scrolled a {
+  color: #000;
+}
+.header.scrolled button {
+  color: white;
+  background: var(--color-primary);
 }
 
 .logo.scrolled {
   transform: scale(0.7);
+  filter: brightness(-10);
 }
 
 .logo img {
     height: 80px;
     width: auto;
     border-radius: 50%;
+  
 
 }
 
@@ -82,26 +106,130 @@ body {
     gap: 20px;
 }
 
-.nav.active {
-    position: fixed;
-    top: 70px;
-    left: 0;
-    width: 100%;
-    background: transparent;
-    flex-direction: column;
-    padding: 20px;
-    z-index: 999;
-}
 
 .nav a {
+    margin-left: 25px;
     text-decoration: none;
-    color: #333;
-    font-weight: 500;
+    color: white;
+    font-weight: 600;
+    transition: color 0.2s;
 }
+
+
 
 .nav a:hover {
     color: #5e2129;
     
+}
+
+@media (max-width: 1200px) {
+  .nav a {
+    display: none;
+  }
+}
+
+.hero {
+    position: relative;
+    color: white;
+    min-height: 830px;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    padding: 40px;
+    background: linear-gradient(120deg,
+    rgba(178, 0, 0, 0.867), 
+    rgba(99, 1, 1, 0.415)),
+    url("/static/img/hero-lab.webp") 
+    center/cover no-repeat;
+    overflow: hidden;
+}
+
+
+/* este es nuestro HERO*/
+.hero-slider {
+  position: relative;
+  height: 100%;
+  margin-top: 93vh;
+}
+
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(1.05);
+  transition: opacity 1s ease, transform 1.2s ease-outcubic-bezier(0.38, 0.6, 0, 2.07);;
+}
+
+.hero-slide.active {
+  opacity: 1;
+  transform: scale(1);
+  z-index: 1;
+}
+
+.hero-card {
+  max-width: 800px;
+  text-align: center;
+  color: white;
+  animation: fadeUp 1.2s ease forwards;
+}
+
+
+.hero-card h1 {
+  font-size: 5.7rem;
+  font-weight: 1000;
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+
+.hero-card p {
+  font-size: 1.15rem;
+  max-width: 450px;
+  margin: 0 auto 35px;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-dots {
+  position: absolute;
+  bottom: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 5;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dot:hover {
+  background: rgba(255,255,255,0.7);
+}
+
+.dot.active {
+  width: 20px;
+  border-radius: 10px;
+  background: white;
 }
 
 .auth-buttons {
@@ -120,12 +248,13 @@ body {
 }
 
 .btn-auth {
-    background-color: #5e2129;
+    background-color: #90000b;
     color: white;
     padding: 15px 20px;
     border-radius: 30px;
     text-decoration: none;
     font-weight: bold;
+    border: none;
 }
 
 .btn-auth:hover {
@@ -134,25 +263,7 @@ body {
     background-color: transparent;
 }
 
-/* HERO */
-.hero {
-    position: relative;
-    color: white;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content:center;
-    padding: 10px 20px;
-    background: linear-gradient(120deg,
-    rgba(57, 8, 8, 0.867), 
-    rgba(22, 1, 1, 0.415)),
-    center/cover no-repeat;
-    overflow: hidden;
-   
-    
-}
-
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
     .btn-auth {
         display: none;
     }
@@ -260,7 +371,7 @@ body {
 
 .footer {
     width: 100%;
-    background-color: #311618;
+    background-color: #90000b;
     color: white;
     padding: 60px 40px 20px;
     margin: 0 auto;
@@ -283,7 +394,7 @@ body {
 
 .footer-brand img {
     width: 200px;
-    filter: brightness(1.3) contrast(1.1);
+    filter: brightness(100) contrast(1.1);
 }
 
 .footer-section p {
@@ -377,9 +488,9 @@ body {
 }
 
 /* RESPONSIVE */
-@media (max-width: 768px) {
-  .nav {
-    display: none;
+@media (max-width: 1200px) {
+  .nav a {
+    display: center;
   }
 
   .hamburger {
@@ -388,7 +499,7 @@ body {
 }
 
 
-@media (max_width: 768px) {
+@media (max_width: 1200px) {
 
     .hero {
         flex-direction: column;
@@ -1387,111 +1498,6 @@ body {
   }
 }
 
-/* Hero slide*/
-
-.hero {
-    position: relative;
-    color: white;
-    min-height: 630px;
-    display: flex;
-    align-items: center;
-    justify-content:center;
-    padding: 40px;
-    background: linear-gradient(120deg,
-    rgba(57, 8, 8, 0.867), 
-    rgba(22, 1, 1, 0.415)),
-    url("/static/img/hero-lab.webp") 
-    center/cover no-repeat;
-    overflow: hidden;
-}
-
-
-/* este es nuestro HERO*/
-.hero-slider {
-  position: relative;
-  height: 100%;
-}
-
-.hero-slide {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transform: scale(1.05);
-  transition: opacity 1s ease, transform 1.2s ease;
-}
-
-.hero-slide.active {
-  opacity: 1;
-  transform: scale(1);
-  z-index: 1;
-}
-
-.hero-card {
-  max-width: 600px;
-  text-align: center;
-  color: white;
-  animation: fadeUp 1.2s ease forwards;
-}
-
-
-.hero-card h1 {
-  font-size: 3.7rem;
-  font-weight: 1000;
-  line-height: 1.15;
-  margin-bottom: 22px;
-}
-
-.hero-card p {
-  font-size: 1.15rem;
-  max-width: 450px;
-  margin: 0 auto 35px;
-  line-height: 1.6;
-  opacity: 0.9;
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(25px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.hero-dots {
-  position: absolute;
-  bottom: 35px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 10px;
-  z-index: 5;
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.4);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.dot:hover {
-  background: rgba(255,255,255,0.7);
-}
-
-.dot.active {
-  width: 20px;
-  border-radius: 10px;
-  background: white;
-}
-
 .search-box {
     width: 100%;
     display: flex;
@@ -1877,7 +1883,7 @@ body {
 .btn-primary {
   margin-top: 10px;
   padding: 17px;
-  background: linear-gradient(135deg, #3c0606, #732323);
+  background: linear-gradient(135deg, #ff0000, #732323);
   color: white;
   border: none;
   border-radius: 20px;
@@ -2200,4 +2206,47 @@ body {
   .contact-hero-overlay h1 {
     font-size: 2.5rem;
   }
+}
+
+/* Contenedor principal en malla */
+.examenes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+/* La tarjeta como tal */
+.examen-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+}
+
+.examen-card:hover {
+  transform: translateY(-5px); /* Un pequeño brinco al pasar el mouse */
+}
+
+/* Ajuste de imagen */
+.examen-card-img img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* Espaciado del texto */
+.examen-card-body {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.examen-card-footer {
+  margin-top: auto; /* Empuja el botón siempre al fondo */
+  padding-top: 15px;
 }

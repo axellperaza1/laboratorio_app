@@ -4,7 +4,7 @@ import re
 from psycopg2.extras import DictCursor
 import psycopg2
 from functools import wraps
-from flask import session, redirect, url_for
+from flask import session, redirect, url_for, send_from_directory
 from flask import request, jsonify, make_response, Response
 from datetime import datetime, timedelta
 import qrcode
@@ -1022,6 +1022,14 @@ def get_historial(cliente_id):
         # IMPORTANTE: Mira tu terminal negra de Python, ahí saldrá el error real
         print(f"Error detectado: {e}") 
         return jsonify({"error": str(e)}), 500
+
+@app.route("/sitemap.xml")
+def sitemap();
+    return send_from_directory(
+        directory="static",
+        path="sitemap.xml",
+        mimetype="application/xml"
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)

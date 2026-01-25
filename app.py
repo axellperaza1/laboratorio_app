@@ -1025,18 +1025,12 @@ def get_historial(cliente_id):
 
 @app.route("/sitemap.xml")
 def sitemap():
-    return send_from_directory(
-        directory=".",
-        path="sitemap.xml",
-        mimetype="application/xml"
+    return send_from_directory("sitemap.xml"
     )
 
 @app.route("/robots.txt")
 def robots():
-    return send_from_directory(
-        directory=".",
-        path="robots.txt",
-        mimetype="text/plain"
+    return send_from_directory("robots.txt"
     )
 
 if __name__ == "__main__":

@@ -1031,7 +1031,7 @@ def sitemap():
         mimetype="application/xml"
     )
 
-@app.route("/robot")
+@app.route("/robots.txt")
 def robots():
     return send_from_directory(
         directory=".",

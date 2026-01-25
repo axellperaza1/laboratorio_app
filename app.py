@@ -1026,7 +1026,7 @@ def get_historial(cliente_id):
 @app.route("/sitemap.xml")
 def sitemap():
     return send_from_directory(
-        directory="static",
+        directory=".",
         path="sitemap.xml",
         mimetype="application/xml"
     )

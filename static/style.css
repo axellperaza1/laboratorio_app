@@ -48,7 +48,6 @@ body {
 }
 .header button{
   color: white;
-  background: var(--color-primary);
 }
 
 .header img {
@@ -77,13 +76,17 @@ body {
 }
 
 .header.scrolled a {
-  color: #000;
+  color: var(--color-text);
 }
 .header.scrolled button {
-  color: white;
-  background: var(--color-primary);
+  color: var(--color-primary);
 }
-
+.header.scrolled .btn-auth{
+    color: white;
+}
+.header.scrolled .mobile-nav a{
+    color: white;
+}
 .logo.scrolled {
   transform: scale(0.7);
   filter: brightness(-10);
@@ -131,7 +134,7 @@ body {
 .hero {
     position: relative;
     color: white;
-    min-height: 830px;
+    min-height: 930px;
     display: flex;
     align-items: center;
     justify-content:center;
@@ -149,7 +152,7 @@ body {
 .hero-slider {
   position: relative;
   height: 100%;
-  margin-top: 93vh;
+  
 }
 
 .hero-slide {
@@ -160,7 +163,7 @@ body {
   justify-content: center;
   opacity: 0;
   transform: scale(1.05);
-  transition: opacity 1s ease, transform 1.2s ease-outcubic-bezier(0.38, 0.6, 0, 2.07);;
+  transition: opacity 1s ease, transform 1.2s ease;
 }
 
 .hero-slide.active {
@@ -173,15 +176,16 @@ body {
   max-width: 800px;
   text-align: center;
   color: white;
-  animation: fadeUp 1.2s ease forwards;
+  
 }
 
 
 .hero-card h1 {
-  font-size: 5.7rem;
-  font-weight: 1000;
+  font-size: clamp(5.7rem, 1vw, 3rem);
+  font-weight: 900;
   line-height: 1.15;
   margin-bottom: 12px;
+  text-align: center;
 }
 
 .hero-card p {
@@ -190,6 +194,22 @@ body {
   margin: 0 auto 35px;
   line-height: 1.6;
   opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+    .hero-slide h1{
+        font-size: 3.2rem;
+        padding:0 1rem;
+    }
+
+    .hero-slide p{
+        font-size: 1rem;        
+        padding:0 1rem;
+    }
+    .hero-slide{
+        max-width: 900px;
+        margin: 0 auto;
+    }
 }
 
 @keyframes fadeUp {

@@ -34,6 +34,7 @@ from flask import send_from_directory
 app = Flask(__name__)
 
 
+
 def conectar():
     try:
         database_url = os.getenv("DATABASE_URL")

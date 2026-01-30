@@ -1,7 +1,9 @@
-{% extends "global2.html" %} {% block title %}Exámenes disponibles{% endblock %}
+{% extends "global2.html" %} 
+{% block title %}Exámenes disponibles{% endblock %}
+
 {% block content %}
- 
-  <div class="search-box">
+
+<div class="search-box">
   <input
     type="text"
     id="searchInput"
@@ -9,88 +11,77 @@
   />
 </div>
 
-
 <section class="examenes-list">
-  {% for examen in examenes %}
-  <div class="examen-row">
-    <!-- Imagen -->
-    <div class="examen-img">
-      <img
-        src="{{ url_for('static', filename=examen.imagen) }}"
-        alt="{{ examen.nombre_examen }}"
-        loading="lazy"
-      />
-    </div>
-
-    <!-- Contenido -->
-    <div class="examen-info">
-      <h2>{{ examen.nombre_examen }}</h2>
-
-      <p class="examen-desc">{{ examen.descripcion }}</p>
-
-
-      <!--Por los momentos no se usará-->
-      <!--<p class="examen-precio">{{ examen.precio }} USD</p>-->
+  
+  <div class="examenes-grid">
+    {% for examen in examenes %}
     
-    
-      <button>
-      <a
-        href="https://api.whatsapp.com/send?phone=584145286666&text=Hola,%20me%20gustaría%20recibir%20información%20y%20cotizar%20el%20examen:%20{{ examen.nombre_examen }}."
-        target="_blank"
-        class="btn-primary"
-      >
-        Cotizar
-      </a>
-    </button>
+    <div class="examen-card">
+      <div class="examen-info">
+        <h2>{{ examen.nombre_examen }}</h2>
+        <p class="examen-desc">{{ examen.descripcion }}</p>
+        
+        <div class="card-action">
+            <a
+              href="https://api.whatsapp.com/send?phone=584145286666&text=Hola,%20me%20gustaría%20recibir%20información%20y%20cotizar%20el%20examen:%20{{ examen.nombre_examen }}."
+              target="_blank"
+              class="btn-primary"
+            >
+              Cotizar
+            </a>
+        </div>
+      </div>
     </div>
+    
+    {% else %}
+      <p style="text-align: center; grid-column: 1 / -1;">No hay exámenes disponibles</p>
+    {% endfor %}
   </div>
-  {% else %}
-  <p style="text-align: center">No hay exámenes disponibles</p>
-  {% endfor %}
+
 </section>
-<div class="examen-row">...</div>
 
-
-<!-- MODAL AUTOLAB -->
 <div class="autolab-modal" id="autolabModal">
   <div class="autolab-backdrop" id="closeAutoLab"></div>
-
   <div class="autolab-box">
     <button class="autolab-close" id="closeAutoLabBtn">×</button>
-
     <h2>Servicio a domicilio</h2>
-    <p>
-      Solicita tu servicio a domicilio, llegamos a donde nos indique.
-    </p>
-
+    <p>Solicita tu servicio a domicilio, llegamos a donde nos indique.</p>
     <div class="autolab-actions">
-      <a
-        href="https://api.whatsapp.com/send?phone=584145286666&text=Hola,%20quiero%20solicitar%20el%20servicio%20AutoLab"
-        target="_blank"
-        class="autolab-btn whatsapp"
-      >
+      <a href="https://api.whatsapp.com/send?phone=584145286666&text=Hola,%20quiero%20solicitar%20el%20servicio%20AutoLab" target="_blank" class="autolab-btn whatsapp">
         <i class="fab fa-whatsapp"></i> WhatsApp
       </a>
-
-      <a
-        href="https://calendly.com/TU_USUARIO/autolab"
-        target="_blank"
-        class="autolab-btn calendar"
-      >
+      <a href="https://calendly.com/TU_USUARIO/autolab" target="_blank" class="autolab-btn calendar">
         <i class="far fa-calendar-alt"></i> Agendar cita
       </a>
-
-      <a
-        href="{{ url_for('autolab') }}"
-        class="autolab-btn location"
-      >
+      <a href="{{ url_for('autolab') }}" class="autolab-btn location">
         <i class="fas fa-map-marker-alt"></i> Pagina a domicilio
       </a>
     </div>
   </div>
 </div>
 
+<script>
+  // Escuchamos cuando alguien escribe en el buscador
+  document.getElementById('searchInput').addEventListener('keyup', function() {
+    
+    // Lo que escribe el usuario (en minúsculas para que no haya rollo)
+    let query = this.value.toLowerCase();
+    
+    // Agarramos todas las tarjetas nuevas
+    let cards = document.querySelectorAll('.examen-card');
 
-
+    cards.forEach(function(card) {
+      // Buscamos el texto dentro de la tarjeta (título y descripción)
+      let text = card.innerText.toLowerCase();
+      
+      // Si el texto coincide, mostramos; si no, ocultamos
+      if (text.includes(query)) {
+        card.style.display = 'flex'; // O 'block', pero flex mantiene el diseño
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
+</script>
 
 {% endblock %}

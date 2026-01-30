@@ -1,3 +1,53 @@
+<!-- MODAL LOGIN -->
+  <div class="auth-modal" id="authModal">
+    <div class="auth-backdrop" id="closeAuth"></div>
+
+    <div class="auth-box">
+      <button class="auth-close" id="closeAuthBtn">×</button>
+
+      <div class="auth-icon">
+        <svg viewBox="0 0 24 24" width="64" height="64">
+          <circle cx="12" cy="8" r="4" fill="#0071e3" />
+          <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="#0071e3" />
+        </svg>
+      </div>
+
+      <h2>Iniciar sesión</h2>
+      <p>Accede a tu cuenta del laboratorio</p>
+
+      <form method="POST" action="{{ url_for('login') }}">
+        <div class="mb-3">
+          <label class="form-label">Correo electrónico</label>
+          <input type="email" name="email" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Contraseña</label>
+          <input
+            type="password"
+            name="contraseña"
+            class="form-control"
+            minlength="8"
+            required
+          />
+        </div>
+
+        <div class="forgot-password">
+          <a href="{{ url_for ('forgot_password') }}"> ¿Olvidaste tu contraseña? 
+            
+          </a>
+        </div>
+
+        <button type="submit" class="btn-primary">Ingresar</button>
+      </form>
+
+      <div class="auth-footer">
+        <span>¿No tienes cuenta?</span>
+        <a href="{{ url_for('registro') }}">Regístrate</a>
+      </div>
+    </div>
+  </div>
+
 <header class="header">
   <div class="logo">
     <img src="{{ url_for('static', filename='img/ong.png') }}" alt="ONG">

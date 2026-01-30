@@ -2270,3 +2270,76 @@ body {
   margin-top: auto; /* Empuja el botón siempre al fondo */
   padding-top: 15px;
 }
+
+/* Contenedor de la grilla */
+.examenes-grid {
+  display: grid;
+  /* Aquí forzamos las 4 columnas */
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 40px; /* Espacio entre tarjeticas */
+  padding: 20px 0;
+}
+
+/* Estilo de la tarjeta flotante */
+.examen-card {
+  background-color: #ffffff; /* Blanco puro */
+  border-radius: 12px; /* Bordes redonditos */
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* La sombra base */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Para que el botón siempre quede abajo alineado */
+  height: 100%; /* Para que todas tengan la misma altura */
+}
+
+/* Efecto al pasar el mouse (Hover) */
+.examen-card:hover {
+  transform: translateY(-5px); /* Se levanta un pelo */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Sombra más fuerte */
+}
+
+.examen-info h2 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.examen-desc {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 15px;
+  line-height: 1.4;
+}
+
+.card-action {
+  margin-top: auto; /* Empuja el botón al fondo */
+  text-align: center;
+}
+
+.btn-primary {
+  /* Asegúrate que tu botón tenga estilos, si no, aquí tienes un básico */
+  display: inline-block;
+  background-color: #007bff;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* --- RESPONSIVE (Para que no se rompa en celular) --- */
+
+/* En tablets bajamos a 2 columnas */
+@media (max-width: 992px) {
+  .examenes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* En celulares bajamos a 1 sola columna */
+@media (max-width: 576px) {
+  .examenes-grid {
+    grid-template-columns: 1fr;
+  }
+}

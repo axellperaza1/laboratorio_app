@@ -4,6 +4,23 @@
 
 {% block contenido %}
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<style>
+    /* Estilos para que los buscadores se vean bonitos con Tailwind */
+    .select2-container .select2-selection--single {
+        height: 50px !important;
+        display: flex;
+        align-items: center;
+        border-radius: 0.75rem; /* rounded-xl */
+        border: 1px solid #d1d5db; /* border-gray-300 */
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 48px !important;
+    }
+</style>
 
 <div class="max-w-6xl mx-auto p-6">
     <h2 class="text-3xl font-bold text-gray-800 mb-8 border-b-2 border-red-800 pb-2">Gestión de Resultados</h2>
@@ -16,11 +33,11 @@
             </h3>
             
             <form method="POST" enctype="multipart/form-data" class="space-y-5">
+                
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Seleccionar Cliente</label>
-                    <select id="select-cliente" name="cliente_id" required 
-                        class="w-full p-3 rounded-xl border-gray-300 shadow-sm focus:ring-2 focus:ring-red-400 focus:border-red-400 outline-none transition-all">
-                        <option value="" disabled selected>Busca un paciente...</option>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Buscar Paciente</label>
+                    <select id="select-cliente" name="cliente_id" required class="w-full">
+                        <option value="" disabled selected>Escribe nombre del paciente...</option>
                         {% for c in clientes %}
                         <option value="{{ c.id }}">{{ c.nombre }}</option>
                         {% endfor %}
@@ -28,9 +45,9 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de Examen</label>
-                    <select name="examen_id" required 
-                        class="w-full p-3 rounded-xl border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-400 outline-none transition-all">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Buscar Examen</label>
+                    <select id="select-examen" name="examen_id" required class="w-full">
+                        <option value="" disabled selected>Escribe nombre del examen...</option>
                         {% for e in examenes %}
                         <option value="{{ e.id }}">{{ e.nombre_examen }}</option>
                         {% endfor %}
@@ -55,7 +72,7 @@
             </h3>
             
             <div id="historial-container" class="space-y-4">
-                <p class="text-gray-400 italic text-center py-10">Selecciona un cliente para ver su historial médico...</p>
+                <p class="text-gray-400 italic text-center py-10">Busca y selecciona un cliente para ver su historial...</p>
             </div>
         </div>
 
@@ -63,45 +80,66 @@
 </div>
 
 <a href="{{url_for('login_personal')}}">
-<button class="w-full bg-red-900 hover:bg-red-800 text-white font-bold py-3 rounded-xl shadow-md transition-all transform hover:scale-[1.02]">
-                  Salir</button>
+    <button class="w-full bg-red-900 hover:bg-red-800 text-white font-bold py-3 rounded-xl shadow-md transition-all transform hover:scale-[1.02] mt-8">
+        Salir
+    </button>
 </a>  
 
 <script>
-document.getElementById('select-cliente').addEventListener('change', function() {
-    const clienteId = this.value;
-    const container = document.getElementById('historial-container');
-    
-    // Mostramos un spinner o mensaje de carga
-    container.innerHTML = '<div class="text-center py-10 text-blue-500 font-medium animate-pulse">Consultando base de datos...</div>';
-
-    fetch(`/get_historial/${clienteId}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.length === 0) {
-                container.innerHTML = '<p class="text-center text-gray-500 py-10">Este paciente no tiene exámenes previos.</p>';
-                return;
-            }
-
-            let html = '<div class="space-y-3">';
-            data.forEach(item => {
-                html += `
-                <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-blue-500 flex justify-between items-center hover:shadow-md transition-all">
-                    <div>
-                        <p class="font-bold text-gray-800">${item.nombre_examen}</p>
-                        <p class="text-xs text-gray-400">${item.fecha_subida}</p>
-                    </div>
-                    <a href="/${item.archivo_pdf}" target="_blank" class="bg-gray-100 hover:bg-red-50 text-red-600 p-2 rounded-full transition-colors">
-                        PDF
-                    </a>
-                </div>`;
-            });
-            html += '</div>';
-            container.innerHTML = html;
-        })
-        .catch(error => {
-            container.innerHTML = '<p class="text-red-500 text-center">Error al cargar la data.</p>';
+    $(document).ready(function() {
+        
+        // --- 1. ACTIVAR BUSCADOR DE PACIENTES ---
+        $('#select-cliente').select2({
+            placeholder: "Escribe nombre del paciente...",
+            allowClear: true,
+            width: '100%'
         });
-});
+
+        // --- 2. ACTIVAR BUSCADOR DE EXÁMENES (NUEVO) ---
+        $('#select-examen').select2({
+            placeholder: "Escribe nombre del examen...",
+            allowClear: true,
+            width: '100%'
+        });
+
+        // --- 3. LÓGICA DEL HISTORIAL ---
+        $('#select-cliente').on('change', function() {
+            const clienteId = $(this).val(); 
+            const container = document.getElementById('historial-container');
+            
+            if (!clienteId) return;
+
+            container.innerHTML = '<div class="text-center py-10 text-blue-500 font-medium animate-pulse">Consultando base de datos...</div>';
+
+            fetch(`/get_historial/${clienteId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length === 0) {
+                        container.innerHTML = '<p class="text-center text-gray-500 py-10">Este paciente no tiene exámenes previos.</p>';
+                        return;
+                    }
+
+                    let html = '<div class="space-y-3">';
+                    data.forEach(item => {
+                        html += `
+                        <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-blue-500 flex justify-between items-center hover:shadow-md transition-all">
+                            <div>
+                                <p class="font-bold text-gray-800">${item.nombre_examen}</p>
+                                <p class="text-xs text-gray-400">${item.fecha_subida}</p>
+                            </div>
+                            <a href="/${item.archivo_pdf}" target="_blank" class="bg-gray-100 hover:bg-red-50 text-red-600 p-2 rounded-full transition-colors">
+                                📝 PDF
+                            </a>
+                        </div>`;
+                    });
+                    html += '</div>';
+                    container.innerHTML = html;
+                })
+                .catch(error => {
+                    container.innerHTML = '<p class="text-red-500 text-center">Error al cargar la data.</p>';
+                    console.error('Error:', error);
+                });
+        });
+    });
 </script>
 {% endblock %}

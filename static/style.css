@@ -991,7 +991,7 @@ body {
 /*AutoLAb*/
 
 .autolab-section {
-  padding: 90px 10%;
+  padding: 90px 15%;
   background: #f9fbfd;
 }
 
@@ -1607,6 +1607,7 @@ body {
   font-size: 17px;
   color: #555;
   line-height: 1.6; /* Para que se lea relajado */
+  margin-bottom: 50px;
 }
 
 /* --- LA GRILLA DE CARDS (Donde ocurre la magia) --- */
@@ -2065,7 +2066,7 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 4rem;
-  padding: 6rem 8%;
+  padding: 6rem 15%;
 }
 
 .lab-video-text {

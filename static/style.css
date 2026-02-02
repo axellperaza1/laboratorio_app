@@ -1554,10 +1554,140 @@ body {
     }
 }
 
+/* Personal hummano*/
+
+/* --- SECCIÓN PRINCIPAL --- */
+.atencion-humana {
+  display: flex; /* Esto pone la imagen y el contenido lado a lado */
+  align-items: center; /* Centra todo verticalmente */
+  justify-content: space-between;
+  gap: 50px; /* Espacio sabroso entre la imagen y el texto */
+  padding: 60px 15%; /* Un buen margen interno para que respire */
+  background-color: #f4f7f6; /* Un gris/azulado muy suave de fondo */
+  overflow: hidden; /* Para evitar scroll horizontal raro */
+}
+
+/* --- LA IMAGEN (Lado Izquierdo) --- */
+.img-humana {
+  flex: 1; /* Ocupa la mitad del espacio disponible */
+  max-width: 500px; /* Que no se vuelva gigante */
+}
+
+.img-humana img {
+  width: 100%;
+  height: auto;
+  border-radius: 20px; /* Bordes bien redondos */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Sombra elegante */
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.img-humana img:hover {
+  transform: scale(1.02); /* Un zoom chiquito al pasar el mouse */
+}
+
+/* --- EL CONTENEDOR DE TEXTO (Lado Derecho) --- */
+.container-humana {
+  flex: 1; /* Ocupa la otra mitad */
+  display: flex;
+  flex-direction: column;
+  gap: 30px; /* Espacio entre el título principal y las cards */
+}
+
+/* Títulos y Párrafos */
+.text-humana h1 {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.text-humana p {
+  font-size: 1.1rem;
+  color: #555;
+  line-height: 1.6; /* Para que se lea relajado */
+}
+
+/* --- LA GRILLA DE CARDS (Donde ocurre la magia) --- */
+.cards-grid {
+  display: grid;
+  /* Esto es clave: crea columnas automáticas. 
+     Si caben 2, pone 2. Si es muy chiquito, pone 1. */
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+/* --- ESTILO DE CADA TARJETA --- */
+.cards-information {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05); /* Sombra suavecita */
+  border-left: 5px solid #8C1D2E ; /* Borde azul de "marca" a la izquierda */
+  transition: all 0.3s ease; /* Para que la animación sea fluida */
+}
+
+/* Efecto Hover en las cards */
+.cards-information:hover {
+  transform: translateY(-5px); /* Se levanta */
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1); /* Sombra más fuerte */
+  background-color: #fff;
+}
+
+.cards-information h3 {
+  font-size: 1.2rem;
+  color: #8C1D2E; /* Azul corporativo */
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.cards-information p {
+  font-size: 0.95rem;
+  color: #666;
+  margin: 0;
+}
+
+/* --- RESPONSIVE (CELULARES Y TABLETS) --- */
+
+/* Cuando la pantalla sea menor a 900px (Tablets y Laptops peques) */
+@media (max-width: 765px) {
+  .atencion-humana {
+    flex-direction: column; /* Pone uno arriba del otro */
+    padding: 40px 20px;
+    gap: 30px;
+    text-align: center; /* Centra el texto para que se vea mejor */
+  }
+
+  .img-humana {
+    max-width: 100%; /* La imagen ocupa todo el ancho */
+  }
+
+  .text-humana h1 {
+    font-size: 2rem;
+  }
+  
+  /* Alineamos el texto de las cards a la izquierda aunque el título general esté centrado */
+  .cards-information {
+    text-align: left; 
+  }
+}
+
+/* Cuando la pantalla sea menor a 480px (Celulares) */
+@media (max-width: 480px) {
+  .cards-grid {
+    grid-template-columns: 1fr; /* Una sola columna de tarjetas */
+  }
+  
+  .text-humana h1 {
+    font-size: 1.8rem;
+  }
+}
+
 /* section de trust*/
 
 .trust-section {
-    padding: 100px 15%;
+    padding: 100px 16%;
     background: none;
     display: flex;
     align-items: center;
@@ -1572,21 +1702,21 @@ body {
 }
 
 .trust-container h6 {
-  font-size: 25px;
+  font-size: 12px;
   margin-bottom: 15px;
   color: var(--color-danger);
 }
 
 .trust-title {
-    font-size: 48px;
+    font-size: 35px;
     margin-bottom: 20px;
     flex: 1;
 }
 
 .trust-subtitle {
-    font-size: 19px;
+    font-size: 16px;
     color: #555;
-    margin: 0 auto 60px;
+    margin: 0 auto 25px;
 }
 
 
@@ -1595,7 +1725,7 @@ body {
 }
 
 .img-trust img {
-    width: 550px;
+    width: 750px;
     height: auto;
     border-radius: 20px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
@@ -1608,6 +1738,7 @@ body {
 
     .trust-section {
         flex-direction: column;
+        padding: 5%;
     }
     .img-trust img {
         max-width: 100%;

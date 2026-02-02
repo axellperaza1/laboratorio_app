@@ -1040,7 +1040,7 @@ body {
 }
 
 /* Responsive */
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   .autolab-content {
     flex-direction: column;
     text-align: center;

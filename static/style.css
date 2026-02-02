@@ -991,7 +991,7 @@ body {
 /*AutoLAb*/
 
 .autolab-section {
-  padding: 90px 8%;
+  padding: 90px 10%;
   background: #f9fbfd;
 }
 
@@ -1009,19 +1009,19 @@ body {
 }
 
 .autolab-text h2 {
-  font-size: 48px;
+  font-size: 35px;
   color: #000000;
   margin-bottom: 10px;
 }
 
 .autolab-text h3 {
-  font-size: 20px;
+  font-size: 19px;
   margin-bottom: 20px;
   color: #222;
 }
 
 .autolab-text p {
-  font-size: 18px;
+  font-size: 17px;
   color: #555;
   margin-bottom: 40px;
   line-height: 1.6;
@@ -1604,7 +1604,7 @@ body {
 }
 
 .text-humana p {
-  font-size: 1.1rem;
+  font-size: 17px;
   color: #555;
   line-height: 1.6; /* Para que se lea relajado */
 }
@@ -2103,6 +2103,7 @@ body {
 
   .autolab-section {
     flex-direction: column;
+    padding: 4%;
     
   }
 }
